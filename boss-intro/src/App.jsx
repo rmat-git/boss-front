@@ -8,7 +8,8 @@ const YOUTUBE_VIDEO_ID = "UDLKp0DqoFU"; // e.g. "dQw4w9WgXcQ"
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
-  { label: "How It Works", href: "#how-it-works" },
+  { label: "New Permit", href: "#how-it-works" },
+  { label: "Renewal", href: "#renewal" },
   { label: "FAQ", href: "#faq" },
   { label: "Contact Us", href: "#contact-us" },
 ];
@@ -94,28 +95,20 @@ function Navbar() {
       }}>
 
         {/* Logo */}
-        <a href="#" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+        <a href="#" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", flexShrink: 0 }}>
           <img
             src="/src/assets/logo.png"
             alt="eBOSS Logo"
-            style={{ width: 72, height: 72, objectFit: "contain" }}
+            style={{ width: 100, height: 120, objectFit: "contain" }}
             onError={e => { e.target.style.display = "none"; }}
           />
-          <div>
-            <div style={{ fontSize: 40, fontWeight: 800, color: "#e07620", letterSpacing: "-0.3px", lineHeight: 1 }}>
-              eBOSS
-            </div>
-            <div style={{ fontSize: 9, color: "#94a3b8", letterSpacing: "0.1em", textTransform: "uppercase", lineHeight: 1.3 }}>
-              Bacolod City · EBIS 4.0
-            </div>
-          </div>
         </a>
 
         {/* Desktop Nav */}
         <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
           {NAV_LINKS.map(l => (
             <a key={l.label} href={l.href} style={{
-              fontSize: 14, color: "#374151", textDecoration: "none", fontWeight: 500,
+              fontSize: 18, color: "#374151", textDecoration: "none", fontWeight: 500,
               transition: "color 0.2s",
             }}
               onMouseEnter={e => e.target.style.color = "#ff9c43"}
@@ -139,7 +132,7 @@ function Hero() {
       minHeight: "100vh",
       background: "linear-gradient(160deg, #fff8f0 0%, #ffffff 45%, #fff3e6 100%)",
       display: "flex", flexDirection: "column", justifyContent: "center",
-      padding: "120px 2rem 80px",
+      padding: "10px 2rem 80px",
       position: "relative", overflow: "hidden",
     }}>
 
@@ -160,16 +153,17 @@ function Hero() {
       <div style={{ maxWidth: 1200, margin: "0 auto", width: "100%", position: "relative" }}>
 
         {/* Badge */}
-        <div style={{
-          display: "inline-flex", alignItems: "center", gap: 8,
-          background: "#fff3e6", border: "1px solid #ffd9a8",
-          borderRadius: 999, padding: "6px 16px",
-          fontSize: 12, fontWeight: 700, color: "#e07620",
-          letterSpacing: "0.08em", textTransform: "uppercase",
-          marginBottom: 28,
-        }}>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#ff9c43", display: "inline-block" }} />
-          Electronic Business Integrated System 4.0
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            background: "#fff3e6", border: "1px solid #ffd9a8",
+            borderRadius: 999, padding: "6px 16px",
+            fontSize: 12, fontWeight: 700, color: "#e07620",
+            letterSpacing: "0.08em", textTransform: "uppercase",
+          }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#ff9c43", display: "inline-block" }} />
+            Electronic Business Integrated System 4.0
+          </div>
         </div>
 
         {/* Headline */}
@@ -180,11 +174,10 @@ function Hero() {
           letterSpacing: "-1.5px",
           lineHeight: 1.08,
           marginBottom: 24,
-          maxWidth: 780,
+          textAlign: "center"
         }}>
-            Bacolod City's <br />
-          <span style={{ color: "#ff9c43" }}>Business </span> One<br />
-          Stop Shop
+            Bacolod City<br />
+          e<span style={{ color: "#ff9c43" }}>Business </span> One Stop Shop<br />
         </h1>
 
         {/* Subtext */}
@@ -192,93 +185,44 @@ function Hero() {
           fontSize: "clamp(1rem, 2vw, 1.15rem)",
           color: "#64748b",
           lineHeight: 1.75,
-          maxWidth: 560,
           marginBottom: 40,
+          textAlign: "center",
         }}>
-          Welcome to Bacolod City's Business One Stop Shop — from document submission and multi-department clearance to payment and QR-secured permit issuance — in one seamless platform.
+          Welcome to Bacolod City's Business One Stop Shop
         </p>
 
         {/* CTAs */}
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 72 }}>
-          <a href="#" style={{
-            width: 200, boxSizing: "border-box", textAlign: "center",
-            padding: "14px 32px",
-            background: "#ff9c43", color: "white",
-            borderRadius: 10, textDecoration: "none",
-            fontSize: 15, fontWeight: 700,
-            boxShadow: "0 6px 24px rgba(255,156,67,0.35)",
-            transition: "all 0.2s",
-            display: "inline-block",
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background = "#e07620"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 10px 32px rgba(255,156,67,0.4)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "#ff9c43"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(255,156,67,0.35)"; }}
-          >
-            eBusiness
-          </a>
-
-            <a href="#" style={{
-            width: 200, boxSizing: "border-box", textAlign: "center",
-            padding: "14px 32px",
-            background: "#ff9c43", color: "white",
-            borderRadius: 10, textDecoration: "none",
-            fontSize: 15, fontWeight: 700,
-            boxShadow: "0 6px 24px rgba(255,156,67,0.35)",
-            transition: "all 0.2s",
-            display: "inline-block",
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background = "#e07620"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 10px 32px rgba(255,156,67,0.4)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "#ff9c43"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(255,156,67,0.35)"; }}
-          >
-            eRPT
-          </a>
-
-            <a href="#" style={{
-            width: 200, boxSizing: "border-box", textAlign: "center",
-            padding: "14px 32px",
-            background: "#ff9c43", color: "white",
-            borderRadius: 10, textDecoration: "none",
-            fontSize: 15, fontWeight: 700,
-            boxShadow: "0 6px 24px rgba(255,156,67,0.35)",
-            transition: "all 0.2s",
-            display: "inline-block",
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background = "#e07620"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 10px 32px rgba(255,156,67,0.4)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "#ff9c43"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(255,156,67,0.35)"; }}
-          >
-            eBuilding
-          </a>
-
-            <a href="#" style={{
-            width: 200, boxSizing: "border-box", textAlign: "center",
-            padding: "14px 32px",
-            background: "#ff9c43", color: "white",
-            borderRadius: 10, textDecoration: "none",
-            fontSize: 15, fontWeight: 700,
-            boxShadow: "0 6px 24px rgba(255,156,67,0.35)",
-            transition: "all 0.2s",
-            display: "inline-block",
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background = "#e07620"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 10px 32px rgba(255,156,67,0.4)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "#ff9c43"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(255,156,67,0.35)"; }}
-          >
-            eMiscellaneous
-          </a>
-
-
+        <div style={{ display: "flex", gap: 20, flexWrap: "wrap", justifyContent: "center", marginTop: 56, marginBottom: 72 }}>
           <a href="#how-it-works" style={{
-            width: 200, boxSizing: "border-box", textAlign: "center",
-            padding: "14px 28px",
-            background: "white", color: "#1a1208",
-            border: "1.5px solid #e2e8f0",
-            borderRadius: 10, textDecoration: "none",
-            fontSize: 15, fontWeight: 600,
+            width: 300, boxSizing: "border-box", textAlign: "center",
+            padding: "14px 32px",
+            background: "#ff9c43", color: "white",
+            borderRadius: 12, textDecoration: "none",
+            fontSize: 17, fontWeight: 700,
+            boxShadow: "0 6px 24px rgba(255,156,67,0.35)",
             transition: "all 0.2s",
-            display: "inline-block",
+            display: "inline-block", alignItems: "center", gap: 10,
           }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = "#ffd9a8"; e.currentTarget.style.color = "#ff9c43"; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.color = "#1a1208"; }}
+            onMouseEnter={e => { e.currentTarget.style.background = "#e07620"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 10px 32px rgba(255,156,67,0.4)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "#ff9c43"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(255,156,67,0.35)"; }}
           >
-            Learn how it works
+            New Business Permit
+          </a>
+
+          <a href="#renewal" style={{
+            width: 300, boxSizing: "border-box", textAlign: "center",
+            padding: "14px 32px",
+            background: "#ff9c43", color: "white",
+            borderRadius: 12, textDecoration: "none",
+            fontSize: 17, fontWeight: 700,
+            boxShadow: "0 6px 24px rgba(255,156,67,0.35)",
+            transition: "all 0.2s",
+            display: "inline-block", alignItems: "center", gap: 10,
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = "#e07620"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 10px 32px rgba(255,156,67,0.4)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "#ff9c43"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(255,156,67,0.35)"; }}
+          >
+            Renewal of Permit
           </a>
         </div>
 
@@ -345,23 +289,45 @@ const PERMIT_DATA = {
       },
       {
         title: "Business Registration Certificate",
-        notes: "DTI for Single Proprietorship (original & photocopy) · SEC Registration with Articles of Inc. for Corporation/Association/Partnership/OPC (original & photocopy) — include updated GIS from SEC if registration is not recent · CDA Registration for Cooperatives (original & photocopy)",
+        notes: [
+          "DTI for Single Proprietorship (original & photocopy)",
+          "SEC Registration with Articles of Inc. for Corporation/Association/Partnership/OPC (original & photocopy) — include updated GIS from SEC if registration is not recent",
+          "CDA Registration for Cooperatives (original & photocopy)"
+        ],
       },
       {
         title: "Proof of Business Location",
-        notes: "If renting: Notarized Contract of Lease · If not renting: Notarized Affidavit of Non-rental (sole prop) / Secretary's Certificate (corp.) / Proof of ownership",
+        notes: [
+          "If renting: Notarized Contract of Lease",
+          "If not renting: Notarized Affidavit of Non-rental (sole prop) / Secretary's Certificate (corp.) / Proof of ownership"
+        ],
       },
       {
         title: "Franchise / Tradename Documents (if applicable)",
-        notes: "Franchise Agreement / Certificate of Dealership / IPO Registration if the business will use another tradename rather than its own",
+        notes: [
+          "Franchise Agreement / Certificate of Dealership / IPO Registration if the business will use another tradename rather than its own"
+        ],
       },
       {
         title: "Required Clearances",
-        notes: "BARANGAY · ZONING · CITY HEALTH OFFICE Clearance / Sanitary Permit to Operate (original & photocopy) · ENRO · OBO",
+        notes: [
+          "BARANGAY",
+          "ZONING",
+          "CITY HEALTH OFFICE Clearance / Sanitary Permit to Operate (original & photocopy)",
+          "ENRO",
+          "OBO"
+        ],
       },
       {
         title: "Special Clearances (as applicable by business type)",
-        notes: "Agri Products / Agriculture related → City Agriculture Office · Cooperatives → City Cooperatives and Livelihood Development Office · Meat and Poultry products → City Veterinary Office · Tourism Related → City Tourism Office · 3 Major Markets & Manukan Country → City Ad Clearance · EGAMES, Cockfighting and the like → valid Resolution of No Objection (RONO) from SP",
+        notes: [
+          "Agri Products / Agriculture related → City Agriculture Office",
+          "Cooperatives → City Cooperatives and Livelihood Development Office",
+          "Meat and Poultry products → City Veterinary Office",
+          "Tourism Related → City Tourism Office",
+          "3 Major Markets & Manukan Country → City Ad Clearance",
+          "EGAMES, Cockfighting and the like → valid Resolution of No Objection (RONO) from SP"
+        ],
       },
       {
         title: "Owner's Valid ID with Specimen Signature (clear photocopy)",
@@ -369,8 +335,15 @@ const PERMIT_DATA = {
       },
     ],
     proxyNote: {
-      toProcess: "Authorization letter · ID of grantor and Authorized Representative",
-      toSign: "Sole Prop: Recent Notarized Special Power of Attorney (SPA) + Valid ID of grantor and authorized representative · Corporation: Recent Notarized Secretary's Certificate · Corp/Companies: Company ID with designation of Grantor and Authorized Representative (in the absence of company ID with designation, any valid ID must be supported with recent General Information Sheet or GIS)",
+      toProcess: [
+        "Authorization letter",
+        "ID of grantor and Authorized Representative"
+      ],
+      toSign: [
+        "Sole Prop: Recent Notarized Special Power of Attorney (SPA) + Valid ID of grantor and authorized representative",
+        "Corporation: Recent Notarized Secretary's Certificate",
+        "Corp/Companies: Company ID with designation of Grantor and Authorized Representative (in the absence of company ID with designation, any valid ID must be supported with recent General Information Sheet or GIS)"
+      ],
     },
     receivingDocs: [
       "Submit business application form with attached documentary requirements",
@@ -384,21 +357,32 @@ const PERMIT_DATA = {
         agency: "BPLO Frontliner accepts application and evaluates completeness of documents submitted for encoding and instructs the client to process the necessary requirements/clearances.",
         fees: "None",
         time: "1 hour",
-        responsible: "Reah Marie P. Rom — License Inspector II · Winnie C. Pabalinas — Licensing Officer I · Mary Ann D. Eder — Clerk III",
+        responsible: [
+          "Reah Marie P. Rom — License Inspector II",
+          "Winnie C. Pabalinas — Licensing Officer I",
+          "Mary Ann D. Eder — Clerk III"
+        ],
       },
       {
         client: "Proceed to City Treasurer's Office–License Division for assessment and payment, then return to CMO–Permits and License Division to present the Official Receipt as proof of payment.",
         agency: "BPLO receives and reviews all submitted documents prior to printing of Mayor's Permit and verification by the BPLO Head.",
         fees: "c/o CTO",
         time: "30 minutes",
-        responsible: "CTO Assessment Officer · CTO Cashier",
+        responsible: [
+          "CTO Assessment Officer",
+          "CTO Cashier"
+        ],
       },
       {
         client: "Receive the Mayor's Permit.",
         agency: "3.1 BPLO Head approves the Mayor's Permit.\n3.2 BPLO Frontliner releases the approved Mayor's Permit.",
         fees: "None",
         time: "30 minutes – 1 hour",
-        responsible: "Printing: Virman T. Akol — Clerk III · Recommending Approval: Stela Rose J. Rayos — Licensing Officer IV · Release: BPLO Frontliners",
+        responsible: [
+          "Printing: Virman T. Akol — Clerk III",
+          "Recommending Approval: Stela Rose J. Rayos — Licensing Officer IV",
+          "Release: BPLO Frontliners"
+        ],
       },
     ],
   },
@@ -416,9 +400,15 @@ const PERMIT_DATA = {
       },
     ],
     proxyNote: {
-      toProcess: "Authorization letter · ID of grantor and Authorized Representative",
-      toSign: "Sole Prop: Recent Notarized Special Power of Attorney (SPA) + Valid ID of grantor and authorized representative · Corporation: Recent Notarized Secretary's Certificate · Corp/Companies: Company ID with designation of Grantor and Authorized Representative (in the absence of company ID with designation, any valid ID must be supported with recent General Information Sheet or GIS)",
-    },
+      toProcess: [
+        "Authorization letter",
+        "ID of grantor and Authorized Representative"
+      ],
+      toSign: [
+        "Sole Prop: Recent Notarized Special Power of Attorney (SPA) + Valid ID of grantor and authorized representative",
+        "Corporation: Recent Notarized Secretary's Certificate",
+        "Corp/Companies: Company ID with designation of Grantor and Authorized Representative (in the absence of company ID with designation, any valid ID must be supported with recent General Information Sheet or GIS)"
+      ],},
     receivingDocs: [
       "Duly signed pre-printed Application Form with Clearances: BARANGAY · ZONING · CITY HEALTH OFFICE Clearance / Sanitary Permit to Operate (original & photocopy) · ENRO · OBO",
       "VALID Fire Safety Inspection Certificate (FSIC) from Bureau of Fire Protection (BFP) — original & photocopy",
@@ -453,202 +443,202 @@ const PERMIT_DATA = {
   },
 };
 
-// ─── Permit Column ────────────────────────────────────────────────────────────
+// ─── Viewer Placeholder ───────────────────────────────────────────────────────
 
-function PermitColumn({ data, accentColor, bgColor, borderColor }) {
+function ViewerPlaceholder({ label, accentColor = "#ff9c43" }) {
   return (
     <div style={{
-      background: bgColor,
-      borderRadius: 20,
-      border: `2px solid ${borderColor}`,
-      overflow: "hidden",
       display: "flex",
       flexDirection: "column",
-      height: "100%",
+      alignItems: "center",
+      justifyContent: "center",
+      background: accentColor + "06",
+      border: `2px dashed ${accentColor}40`,
+      borderRadius: 14,
+      padding: "40px 24px",
+      textAlign: "center",
+      gap: 16,
+      minHeight: 340,
     }}>
-      {/* Column header */}
       <div style={{
-        padding: "22px 26px 20px",
-        background: accentColor,
-        display: "flex", alignItems: "center", gap: 12,
+        width: 68, height: 68, borderRadius: 18,
+        background: accentColor + "18",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontSize: 32,
       }}>
-        <div style={{
-          width: 42, height: 42, borderRadius: "50%",
-          background: "rgba(255,255,255,0.2)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 20, flexShrink: 0,
-        }}>
-          {accentColor === "#ff9c43" ? "🆕" : "🔄"}
+        📄
+      </div>
+      <div>
+        <div style={{ fontSize: 15, fontWeight: 700, color: "#1a1208", marginBottom: 6 }}>
+          Document Viewer
         </div>
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.75)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 2 }}>
-            Application for Mayor's Permit
-          </div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: "white", letterSpacing: "-0.3px" }}>
-            {data.label}
-          </div>
+        <div style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.6, maxWidth: 240 }}>
+          This area will display {label} — PDFs, downloadable forms, or requirement lists.
         </div>
       </div>
-
-      {/* Meta bar */}
-      <div style={{
-        display: "grid", gridTemplateColumns: "1fr 1fr",
-        gap: 0,
-        borderBottom: `1px solid ${borderColor}`,
-      }}>
-        {[
-          { label: "Classification", value: data.classification },
-          { label: "Transaction Type", value: data.transaction },
-          { label: "Who May Avail", value: data.whoMayAvail },
-          { label: "Total Processing Time", value: data.totalTime },
-        ].map((item, i) => (
-          <div key={item.label} style={{
-            padding: "12px 18px",
-            borderRight: i % 2 === 0 ? `1px solid ${borderColor}` : "none",
-            borderBottom: i < 2 ? `1px solid ${borderColor}` : "none",
+      <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 8, marginTop: 4 }}>
+        {["Application Form (PDF)", "Requirements Checklist", "Fee Schedule"].map((item, i) => (
+          <div key={i} style={{
+            display: "flex", alignItems: "center", gap: 10,
+            padding: "10px 14px",
             background: "white",
+            border: "1px solid #f0e8dc",
+            borderRadius: 9,
+            opacity: 0.55,
           }}>
-            <div style={{ fontSize: 10.5, fontWeight: 700, color: accentColor, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 2 }}>
-              {item.label}
-            </div>
-            <div style={{ fontSize: 14, color: "#1a1208", fontWeight: 600, lineHeight: 1.4 }}>
-              {item.value}
+            <span style={{ fontSize: 14 }}>📎</span>
+            <span style={{ fontSize: 13, color: "#64748b", fontStyle: "italic" }}>{item}</span>
+            <div style={{
+              marginLeft: "auto", padding: "3px 10px",
+              background: "#f5f0eb", borderRadius: 999,
+              fontSize: 11, color: "#94a3b8", fontWeight: 600,
+            }}>
+              Coming soon
             </div>
           </div>
         ))}
       </div>
-
-      {/* Content */}
-      <div style={{ padding: "22px 22px", display: "flex", flexDirection: "column", gap: 20, flex: 1 }}>
-
-        {/* Checklist */}
-        <div>
-          <SectionCard title="📋 Checklist of Requirements" accent={accentColor}>
-            <SubHeading label="For Encoding" />
-            {data.encodingDocs.map((doc, i) => (
-              <DocItem key={i} number={i + 1} title={doc.title} notes={doc.notes} accentColor={accentColor} />
-            ))}
-
-            <div style={{
-              marginTop: 14,
-              padding: "13px 15px",
-              background: "#fffbeb",
-              border: "1px solid #fde68a",
-              borderRadius: 10,
-              fontSize: 14,
-              color: "#78350f",
-              lineHeight: 1.65,
-            }}>
-              <div style={{ fontWeight: 700, marginBottom: 6 }}>📝 If transacting on behalf of the Owner:</div>
-              <div style={{ marginBottom: 5 }}>
-                <span style={{ fontWeight: 600 }}>To Process only: </span>{data.proxyNote.toProcess}
-              </div>
-              <div>
-                <span style={{ fontWeight: 600 }}>To Sign: </span>{data.proxyNote.toSign}
-              </div>
-            </div>
-
-            <SubHeading label="Upon Receiving / Submission" top={18} />
-            {data.receivingDocs.map((doc, i) => (
-              <DocItem key={i} number={i + 1} title={doc} notes={null} accentColor={accentColor} />
-            ))}
-
-            <div style={{
-              marginTop: 12,
-              padding: "11px 14px",
-              background: "#f0fdf4",
-              border: "1px solid #86efac",
-              borderRadius: 10,
-              fontSize: 14,
-              color: "#14532d",
-              lineHeight: 1.6,
-            }}>
-              <span style={{ fontWeight: 700 }}>📍 Where to Secure: </span>{data.whereToSecure}
-            </div>
-          </SectionCard>
-        </div>
-
-        {/* Procedure */}
-        <div>
-          <SectionCard title="🔄 Procedure Flow" accent="#3b82f6">
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              {data.steps.map((step, i) => (
-                <StepBlock key={i} index={i} step={step} isLast={i === data.steps.length - 1} />
-              ))}
-            </div>
-            <div style={{
-              marginTop: 18,
-              padding: "12px 16px",
-              background: "#fff8f0",
-              border: "1px solid #ffd9a8",
-              borderRadius: 10,
-              display: "flex", alignItems: "center", gap: 10,
-            }}>
-              <span style={{ fontSize: 20 }}>⏱</span>
-              <div>
-                <div style={{ fontSize: 10.5, fontWeight: 700, color: "#e07620", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 1 }}>Total Processing Time</div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: "#1a1208" }}>{data.totalTime}</div>
-              </div>
-            </div>
-          </SectionCard>
-        </div>
-
+      <div style={{
+        padding: "8px 16px",
+        background: "white",
+        border: `1.5px dashed ${accentColor}70`,
+        borderRadius: 999,
+        fontSize: 11, color: accentColor,
+        fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase",
+      }}>
+        Placeholder — Content TBD
       </div>
     </div>
   );
 }
 
-// ─── How It Works — Side by Side ─────────────────────────────────────────────
+// ─── Shared Permit Section ────────────────────────────────────────────────────
 
-function HowItWorks() {
-  const [ref, visible] = useInView(0.05);
+function PermitSection({ id, data, bg, accentColor, borderColor, siblingHref, siblingLabel }) {
+  const [ref, visible] = useInView(0.06);
 
   return (
-    <section id="how-it-works" style={{ padding: "100px 2rem", background: "#f8f4f0" }}>
-      <div style={{ maxWidth: 1400, margin: "0 auto" }}>
+    <section id={id} style={{ padding: "100px 2rem", background: bg, scrollMarginTop: 120 }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
 
-        {/* Section header */}
+        {/* Header */}
         <div ref={ref} style={{
-          textAlign: "center", marginBottom: 48,
+          textAlign: "center", marginBottom: 44,
           opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
           transition: "all 0.55s ease",
         }}>
-          <div style={{ fontSize: 14, fontWeight: 700, color: "#ff9c43", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 12 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: accentColor, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 10 }}>
             Requirements & Procedure
           </div>
           <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#1a1208", letterSpacing: "-0.5px", marginBottom: 14 }}>
-            Application for Mayor's Permit
+            {data.label}
           </h2>
-          <p style={{ fontSize: 17, color: "#64748b", maxWidth: 620, margin: "0 auto", lineHeight: 1.7 }}>
-            Complete requirements and procedure flow for both permit types, side by side, as prescribed by the City Mayor's Office — Permits and Licensing Division.
+          <p style={{ fontSize: 16, color: "#64748b", maxWidth: 580, margin: "0 auto", lineHeight: 1.7 }}>
+            Complete checklist of requirements and step-by-step procedure flow as prescribed by the City Mayor's Office — Permits and Licensing Division.
           </p>
         </div>
 
-        {/* Side-by-side columns */}
+        {/* Meta Info Bar */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 24,
-          alignItems: "stretch",
+          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+          gap: 0,
+          marginBottom: 36,
+          borderRadius: 14,
+          border: `1px solid ${borderColor}`,
+          overflow: "hidden",
         }}>
-          <PermitColumn
-            data={PERMIT_DATA.new}
-            accentColor="#ff9c43"
-            bgColor="#fffaf6"
-            borderColor="#ffd9a8"
-          />
-          <PermitColumn
-            data={PERMIT_DATA.renewal}
-            accentColor="#3b82f6"
-            bgColor="#f5f9ff"
-            borderColor="#bfdbfe"
-          />
+          {[
+            { label: "Classification", value: data.classification },
+            { label: "Transaction Type", value: data.transaction },
+            { label: "Who May Avail", value: data.whoMayAvail },
+            { label: "Total Processing Time", value: data.totalTime },
+          ].map((item, i, arr) => (
+            <div key={item.label} style={{
+              padding: "16px 20px",
+              background: "white",
+              borderRight: i < arr.length - 1 ? `1px solid ${borderColor}` : "none",
+            }}>
+              <div style={{ fontSize: 10.5, fontWeight: 700, color: accentColor, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>
+                {item.label}
+              </div>
+              <div style={{ fontSize: 14.5, color: "#1a1208", fontWeight: 600, lineHeight: 1.4 }}>
+                {item.value}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Two-column: Left (Requirements + Procedure) | Right (Viewer) */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28, alignItems: "start" }}>
+
+          {/* ── Left: Requirements + Procedure stacked ── */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+
+            <SectionCard title="📋 Checklist of Requirements" accent={accentColor}>
+              <SubHeading label="For Encoding" />
+              {data.encodingDocs.map((doc, i) => (
+                <DocItem key={i} number={i + 1} title={doc.title} notes={doc.notes} accentColor={accentColor} />
+              ))}
+              <div style={{
+                marginTop: 14, padding: "13px 15px",
+                background: "#fffbeb", border: "1px solid #fde68a",
+                borderRadius: 10, fontSize: 14, color: "#78350f", lineHeight: 1.65,
+              }}>
+                <div style={{ fontWeight: 700, marginBottom: 6 }}>📝 If transacting on behalf of the Owner:</div>
+                <div style={{ marginBottom: 5 }}>
+                  <span style={{ fontWeight: 600 }}>To Process only: </span>{data.proxyNote.toProcess}
+                </div>
+                <div>
+                  <span style={{ fontWeight: 600 }}>To Sign: </span>{data.proxyNote.toSign}
+                </div>
+              </div>
+              <SubHeading label="Upon Receiving / Submission" top={18} />
+              {data.receivingDocs.map((doc, i) => (
+                <DocItem key={i} number={i + 1} title={doc} notes={null} accentColor={accentColor} />
+              ))}
+              <div style={{
+                marginTop: 12, padding: "11px 14px",
+                background: "#f0fdf4", border: "1px solid #86efac",
+                borderRadius: 10, fontSize: 14, color: "#14532d", lineHeight: 1.6,
+              }}>
+                <span style={{ fontWeight: 700 }}>📍 Where to Secure: </span>{data.whereToSecure}
+              </div>
+            </SectionCard>
+
+            <SectionCard title="🔄 Procedure Flow" accent="#3b82f6">
+              <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+                {data.steps.map((step, i) => (
+                  <StepBlock key={i} index={i} step={step} isLast={i === data.steps.length - 1} />
+                ))}
+              </div>
+              <div style={{
+                marginTop: 22, padding: "14px 18px",
+                background: "#fff8f0", border: "1px solid #ffd9a8",
+                borderRadius: 10, display: "flex", alignItems: "center", gap: 12,
+              }}>
+                <span style={{ fontSize: 22 }}>⏱</span>
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: "#e07620", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 2 }}>
+                    Total Processing Time
+                  </div>
+                  <div style={{ fontSize: 17, fontWeight: 800, color: "#1a1208" }}>{data.totalTime}</div>
+                </div>
+              </div>
+            </SectionCard>
+          </div>
+
+          {/* ── Right: Document Viewer (sticky) ── */}
+          <div style={{ position: "sticky", top: 140 }}>
+            <SectionCard title="📂 Documents & Forms" accent={accentColor}>
+              <ViewerPlaceholder label={`${data.label} documents`} accentColor={accentColor} />
+            </SectionCard>
+          </div>
         </div>
 
         {/* RA 11032 Note */}
         <div style={{
-          marginTop: 32,
-          padding: "16px 28px",
+          marginTop: 32, padding: "16px 24px",
           background: "#fff8f0", border: "1px solid #ffd9a8",
           borderRadius: 12, fontSize: 15, color: "#9a3412",
           textAlign: "center", lineHeight: 1.7,
@@ -656,9 +646,40 @@ function HowItWorks() {
           <strong>⚖️ RA 11032 (Ease of Doing Business Act):</strong> Simple transactions must be processed within{" "}
           <strong>3 working days</strong>; complex ones within <strong>7 working days</strong>. EBIS 4.0 tracks each department's clearance status in real time.
         </div>
-
       </div>
     </section>
+  );
+}
+
+// ─── New Business Permit ──────────────────────────────────────────────────────
+
+function HowItWorks() {
+  return (
+    <PermitSection
+      id="how-it-works"
+      data={PERMIT_DATA.new}
+      bg="#ffffff"
+      accentColor="#ff9c43"
+      borderColor="#ffd9a8"
+      siblingHref="#renewal"
+      siblingLabel="Renewal"
+    />
+  );
+}
+
+// ─── Renewal of Business Permit ───────────────────────────────────────────────
+
+function RenewalSection() {
+  return (
+    <PermitSection
+      id="renewal"
+      data={PERMIT_DATA.renewal}
+      bg="#f5f9ff"
+      accentColor="#3b82f6"
+      borderColor="#bfdbfe"
+      siblingHref="#how-it-works"
+      siblingLabel="New Permit"
+    />
   );
 }
 
@@ -725,7 +746,13 @@ function DocItem({ number, title, notes, accentColor = "#ff9c43" }) {
       <div>
         <div style={{ fontSize: 14.5, fontWeight: 600, color: "#1a1208", lineHeight: 1.45 }}>{title}</div>
         {notes && (
-          <div style={{ fontSize: 14, color: "#5b6572", marginTop: 3, lineHeight: 1.5 }}>{notes}</div>
+          Array.isArray(notes) ? (
+            <ul style={{ margin: "4px 0 0 0", paddingLeft: 18, fontSize: 14, color: "#5b6572", lineHeight: 1.5 }}>
+              {notes.map((note, i) => <li key={i}>{note}</li>)}
+            </ul>
+          ) : (
+            <div style={{ fontSize: 14, color: "#5b6572", marginTop: 3, lineHeight: 1.5 }}>{notes}</div>
+          )
         )}
       </div>
     </div>
@@ -830,7 +857,7 @@ function VideoSection() {
   const [ref, visible] = useInView(0.1);
 
   return (
-    <section style={{ padding: "60px 2rem 100px", background: "white" }}>
+    <section style={{ padding: "60px 2rem 100px", background: "#fff8f0" }}>
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
         <div ref={ref} style={{
           background: "white",
@@ -978,6 +1005,7 @@ export default function App() {
       <Hero />
       <AgencyStrip />
       <HowItWorks />
+      <RenewalSection />
       <VideoSection />
       <Footer />
     </div>
