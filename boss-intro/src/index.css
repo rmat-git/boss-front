@@ -1,0 +1,21 @@
+:root {
+  --color-primary: #ff9c43;
+  --color-primary-hover: #e07620;
+  --color-text-dark: #1a1208;
+  --color-text-muted: #64748b;
+  --color-bg-light: #fff3e6;
+  --color-border-light: #ffd9a8;
+  --color-footer-dark: #1a0f00;
+  --color-footer-deeper: #120a00;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+#root {
+  width: 100%;
+}
