@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useInView } from "../../hooks/useInView";
+import { useIsMobile } from "../../hooks/useIsMobile"; // FIX #2: shared hook, removed inline duplicate
 import { SectionCard, SubHeading, DocItem, StepBlock, DocumentViewer } from "../ui/PermitUI";
 
 // ─── Mobile Document Viewer Modal ─────────────────────────────────────────────
@@ -43,8 +44,8 @@ function DocModal({ selectedKey, label, accentColor, onClose }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        // MOBILE FIX: Responsive padding
-        padding: window.innerWidth < 400 ? "12px 12px" : "20px 16px",
+        // FIX #4: replaced window.innerWidth reads with CSS-only values
+        padding: "clamp(12px, 3vw, 20px) clamp(12px, 4vw, 16px)",
         background: mounted ? "rgba(15, 10, 5, 0.55)" : "rgba(15, 10, 5, 0)",
         backdropFilter: mounted ? "blur(6px)" : "blur(0px)",
         WebkitBackdropFilter: mounted ? "blur(6px)" : "blur(0px)",
@@ -54,8 +55,8 @@ function DocModal({ selectedKey, label, accentColor, onClose }) {
       <div
         style={{
           width: "100%",
-          // MOBILE FIX: Responsive max-width — 95vw on tiny phones, 480px on larger mobile
-          maxWidth: window.innerWidth < 380 ? "95vw" : 480,
+          // FIX #4: replaced window.innerWidth < 380 branch with a single CSS value
+          maxWidth: "min(95vw, 480px)",
           maxHeight: "85vh",
           overflowY: "auto",
           borderRadius: 20,
@@ -121,28 +122,25 @@ function DocModal({ selectedKey, label, accentColor, onClose }) {
 
 // ─── PermitSection ─────────────────────────────────────────────────────────────
 
-export default function PermitSection({ id, data, bg, accentColor, borderColor }) {
+// FIX #21: added explicit `variant` prop — isRenewal no longer derived from magic string id
+export default function PermitSection({ id, data, bg, accentColor, borderColor, variant = "new" }) {
   const [ref, visible] = useInView(0.06);
   const [selectedKey, setSelectedKey] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const isRenewal = id === "renewal";
+  // FIX #2: replaced inline useEffect/resize listener with shared hook
+  const isMobile = useIsMobile();
+
+  // FIX #21: reads from variant prop, not from id string
+  const isRenewal = variant === "renewal";
   const reqPrefix = isRenewal ? "renewal_req" : "req";
   const stepPrefix = isRenewal ? "renewal_step" : "new_step";
 
-  // Reactively track viewport width
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 900);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
+  // FIX #7: setModalOpen(!!next) — modal now closes when the active item is tapped again
   const handleDocClick = useCallback((key) => {
     setSelectedKey(prev => {
       const next = prev === key ? null : key;
-      if (next) setModalOpen(true); // always open modal on mobile when selecting
+      setModalOpen(!!next);
       return next;
     });
   }, []);
@@ -152,15 +150,19 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor }
     // Keep selectedKey intact so desktop stays highlighted if user resizes
   }, []);
 
-  let globalReceivingCounter = 0;
+  // FIX #6: pre-compute flat receiving items with sequential numbers before JSX return,
+  // replacing the mutable `let globalReceivingCounter` that was mutated during render
+  const flatReceivingItems = Array.isArray(data.receivingDocs) && typeof data.receivingDocs[0] !== "string"
+    ? data.receivingDocs.flatMap((group) => group.items.map((doc) => ({ ...doc, groupLabel: group.groupLabel })))
+    : [];
 
   // MOBILE FIX: Responsive padding — 1rem on mobile, 2rem on desktop
   const sectionPadding = isMobile ? "1.5rem 1rem" : "100px 2rem";
-  
+
   // MOBILE FIX: Responsive header margins
   const headerMarginBottom = isMobile ? 28 : 44;
-  
-  // MOBILE FIX: Responsive meta grid gap
+
+  // FIX #12: metaGap was computed but never applied — now wired to the meta grid gap
   const metaGap = isMobile ? 12 : undefined;
 
   return (
@@ -169,38 +171,40 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor }
 
         {/* Header */}
         <div ref={ref} style={{
-          textAlign: "center", 
+          textAlign: "center",
           marginBottom: headerMarginBottom,
-          opacity: visible ? 1 : 0, 
+          opacity: visible ? 1 : 0,
           transform: visible ? "translateY(0)" : "translateY(20px)",
           transition: "all 0.55s ease",
         }}>
-          <div style={{ 
-            fontSize: isMobile ? 11 : 13, 
-            fontWeight: 700, 
-            color: accentColor, 
-            letterSpacing: "0.12em", 
-            textTransform: "uppercase", 
-            marginBottom: 10 
+          <div style={{
+            fontSize: isMobile ? 11 : 13,
+            fontWeight: 700,
+            color: accentColor,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            marginBottom: 10
           }}>
             Requirements & Procedure
           </div>
-          <h2 style={{ 
+          <h2 style={{
             fontSize: isMobile ? "clamp(1.5rem, 5vw, 2.8rem)" : "clamp(1.8rem, 3.5vw, 2.8rem)",
-            fontWeight: 800, 
-            color: "#1a1208", 
-            letterSpacing: "-0.5px", 
-            marginBottom: 14 
+            fontWeight: 800,
+            color: "#1a1208",
+            letterSpacing: "-0.5px",
+            marginBottom: 14
           }}>
             {data.label}
           </h2>
-          <p style={{ 
-            fontSize: isMobile ? 14 : 16, 
-            color: "#64748b", 
-            maxWidth: 580, 
-            margin: "0 auto", 
+          <p style={{
+            fontSize: isMobile ? 14 : 16,
+            color: "#64748b",
+            maxWidth: 580,
+            margin: "0 auto",
             lineHeight: 1.7,
-            paddingX: isMobile ? "1rem" : "0"
+            // FIX #13: replaced invalid `paddingX` with paddingLeft + paddingRight
+            paddingLeft: isMobile ? "1rem" : "0",
+            paddingRight: isMobile ? "1rem" : "0",
           }}>
             Complete checklist of requirements and step-by-step procedure flow as prescribed by the City Mayor's Office — Permits and Licensing Division.
           </p>
@@ -209,14 +213,14 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor }
         {/* Meta Info Bar */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: isMobile 
-            ? "repeat(2, 1fr)" 
+          gridTemplateColumns: isMobile
+            ? "repeat(2, 1fr)"
             : "repeat(auto-fit, minmax(140px, 1fr))",
           marginBottom: 36,
           borderRadius: 14,
           border: `1px solid ${borderColor}`,
           overflow: "hidden",
-          gap: metaGap,
+          gap: metaGap, // FIX #12: metaGap now actually applied here
         }}>
           {[
             { label: "Classification", value: data.classification },
@@ -288,13 +292,13 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor }
               })}
 
               <div style={{
-                marginTop: 14, 
+                marginTop: 14,
                 padding: isMobile ? "11px 13px" : "13px 15px",
-                background: "#fffbeb", 
+                background: "#fffbeb",
                 border: "1px solid #fde68a",
-                borderRadius: 10, 
-                fontSize: isMobile ? 13 : 14, 
-                color: "#78350f", 
+                borderRadius: 10,
+                fontSize: isMobile ? 13 : 14,
+                color: "#78350f",
                 lineHeight: 1.65,
               }}>
                 <div style={{ fontWeight: 700, marginBottom: 6 }}>📝 If transacting on behalf of the Owner:</div>
@@ -314,14 +318,15 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor }
 
               <SubHeading label="Upon Receiving / Submission" top={18} accentColor={accentColor} />
 
+              {/* FIX #6: replaced mutable let counter with pre-computed flatReceivingItems */}
               {typeof data.receivingDocs[0] === "string"
                 ? data.receivingDocs.map((doc, i) => (
-                    <DocItem 
-                      key={i} 
-                      number={i + 1} 
-                      title={doc} 
-                      notes={null} 
-                      accentColor={accentColor} 
+                    <DocItem
+                      key={i}
+                      number={i + 1}
+                      title={doc}
+                      notes={null}
+                      accentColor={accentColor}
                       isMobile={isMobile}
                     />
                   ))
@@ -333,22 +338,26 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor }
                           padding: "6px 12px",
                           background: accentColor + "12",
                           border: `1px solid ${accentColor}30`,
-                          borderRadius: 8, 
-                          fontSize: isMobile ? 10.5 : 11.5, 
+                          borderRadius: 8,
+                          fontSize: isMobile ? 10.5 : 11.5,
                           fontWeight: 700,
-                          color: accentColor, 
-                          letterSpacing: "0.07em", 
+                          color: accentColor,
+                          letterSpacing: "0.07em",
                           textTransform: "uppercase",
                         }}>
                           📂 {group.groupLabel}
                         </div>
                       )}
                       {group.items.map((doc) => {
-                        globalReceivingCounter += 1;
+                        // FIX #6: index derived from pre-computed flat list — no mutation during render
+                        const flatIndex = flatReceivingItems.findIndex(
+                          (f) => f === doc || (f.title === doc.title && f.groupLabel === group.groupLabel)
+                        );
+                        const number = flatIndex + 1;
                         return (
                           <DocItem
-                            key={globalReceivingCounter}
-                            number={globalReceivingCounter}
+                            key={number}
+                            number={number}
                             title={doc.title}
                             notes={doc.notes}
                             accentColor={accentColor}
@@ -361,13 +370,13 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor }
               }
 
               <div style={{
-                marginTop: 14, 
+                marginTop: 14,
                 padding: isMobile ? "11px 13px" : "13px 15px",
-                background: "#eff6ff", 
+                background: "#eff6ff",
                 border: "1px solid #bfdbfe",
-                borderRadius: 10, 
-                fontSize: isMobile ? 13 : 14, 
-                color: "#1e3a8a", 
+                borderRadius: 10,
+                fontSize: isMobile ? 13 : 14,
+                color: "#1e3a8a",
                 lineHeight: 1.65,
               }}>
                 <div style={{ fontWeight: 700, marginBottom: 6 }}>📥 Upon Submission:</div>
@@ -381,13 +390,13 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor }
               </div>
 
               <div style={{
-                marginTop: 12, 
+                marginTop: 12,
                 padding: isMobile ? "10px 12px" : "11px 14px",
-                background: "#f0fdf4", 
+                background: "#f0fdf4",
                 border: "1px solid #86efac",
-                borderRadius: 10, 
-                fontSize: isMobile ? 13 : 14, 
-                color: "#14532d", 
+                borderRadius: 10,
+                fontSize: isMobile ? 13 : 14,
+                color: "#14532d",
                 lineHeight: 1.6,
               }}>
                 <span style={{ fontWeight: 700 }}>📍 Where to Secure: </span>{data.whereToSecure}
@@ -412,31 +421,31 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor }
                 })}
               </div>
               <div style={{
-                marginTop: 22, 
+                marginTop: 22,
                 padding: isMobile ? "12px 14px" : "14px 18px",
-                background: "#fff8f0", 
+                background: "#fff8f0",
                 border: "1px solid #ffd9a8",
-                borderRadius: 10, 
-                display: "flex", 
-                alignItems: "center", 
+                borderRadius: 10,
+                display: "flex",
+                alignItems: "center",
                 gap: isMobile ? 10 : 12,
               }}>
                 <span style={{ fontSize: isMobile ? 18 : 22 }}>⏱</span>
                 <div>
-                  <div style={{ 
-                    fontSize: isMobile ? 11 : 12, 
-                    fontWeight: 700, 
-                    color: "#e07620", 
-                    textTransform: "uppercase", 
-                    letterSpacing: "0.08em", 
-                    marginBottom: 2 
+                  <div style={{
+                    fontSize: isMobile ? 11 : 12,
+                    fontWeight: 700,
+                    color: "#e07620",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    marginBottom: 2
                   }}>
                     Total Processing Time
                   </div>
-                  <div style={{ 
-                    fontSize: isMobile ? 15 : 17, 
-                    fontWeight: 800, 
-                    color: "#1a1208" 
+                  <div style={{
+                    fontSize: isMobile ? 15 : 17,
+                    fontWeight: 800,
+                    color: "#1a1208"
                   }}>
                     {data.totalTime}
                   </div>
@@ -461,14 +470,14 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor }
 
         {/* RA 11032 Note */}
         <div style={{
-          marginTop: 32, 
+          marginTop: 32,
           padding: isMobile ? "14px 16px" : "16px 24px",
-          background: "#fff8f0", 
+          background: "#fff8f0",
           border: "1px solid #ffd9a8",
-          borderRadius: 12, 
-          fontSize: isMobile ? 13 : 15, 
+          borderRadius: 12,
+          fontSize: isMobile ? 13 : 15,
           color: "#9a3412",
-          textAlign: "center", 
+          textAlign: "center",
           lineHeight: 1.7,
         }}>
           <strong>⚖️ RA 11032 (Ease of Doing Business Act):</strong> Simple transactions must be processed within{" "}

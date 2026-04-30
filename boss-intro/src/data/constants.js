@@ -8,6 +8,8 @@ export const NAV_LINKS = [
   { label: "Contact Us", href: "#contact-us" },
 ];
 
+export const MOBILE_BREAKPOINT = 900;
+
 export const PHASES = [
   {
     number: "01",

@@ -1,3 +1,5 @@
+import logomitcs from "../../assets/logo-m.png";
+
 const FOOTER_COLS = [
   {
     heading: "Services",
@@ -43,7 +45,7 @@ const Brand = () => (
   <div style={{ maxWidth: 280 }}>
     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
       <img
-        src="/src/assets/logo-m.png"
+        src={logomitcs}
         alt="eBOSS"
         style={{ width: 30, height: 30, objectFit: "contain" }}
         onError={e => { e.target.style.display = "none"; }}
@@ -62,49 +64,26 @@ export default function Footer() {
   return (
     <footer style={{ background: "#1a0f00", color: "rgba(255,255,255,0.45)" }}>
 
-      {/* ── Desktop Footer — original layout ── */}
-      <div className="footer-desktop" style={{ padding: "56px 2rem 32px" }}>
+      <div style={{ padding: "clamp(32px, 5vw, 56px) clamp(1.25rem, 4vw, 2rem) 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{
-            display: "flex", justifyContent: "space-between", alignItems: "flex-start",
-            flexWrap: "wrap", gap: 40, marginBottom: 48,
-          }}>
-            <Brand />
-            <div style={{ display: "flex", gap: 56, flexWrap: "wrap" }}>
-              {FOOTER_COLS.map(col => <LinkCol key={col.heading} col={col} />)}
-            </div>
-          </div>
-          <div style={{
-            borderTop: "1px solid rgba(255,255,255,0.06)",
-            paddingTop: 24,
-            display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12,
-          }}>
-            <span style={{ fontSize: 12 }}>
-              © 2025 EBIS 4.0 — Bacolod City Government. Republic of the Philippines. All rights reserved.
-            </span>
-            <span style={{ fontSize: 12 }}>
-              Data Privacy Act (RA 10173) Compliant · RA 11032 (Ease of Doing Business) · JMC Standards
-            </span>
-          </div>
-        </div>
-      </div>
 
-      {/* ── Mobile Footer — grid layout ── */}
-      <div className="footer-mobile" style={{ padding: "32px 1.25rem 24px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
             gap: "clamp(24px, 5vw, 40px)",
-            marginBottom: 28,
+            marginBottom: "clamp(28px, 5vw, 48px)",
           }}>
             <Brand />
             {FOOTER_COLS.map(col => <LinkCol key={col.heading} col={col} />)}
           </div>
+
           <div style={{
             borderTop: "1px solid rgba(255,255,255,0.06)",
             paddingTop: 24,
-            display: "flex", flexDirection: "column", gap: 8,
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            gap: 8,
           }}>
             <span style={{ fontSize: 12 }}>
               © 2025 EBIS 4.0 — Bacolod City Government. Republic of the Philippines. All rights reserved.
@@ -113,16 +92,10 @@ export default function Footer() {
               Data Privacy Act (RA 10173) Compliant · RA 11032 (Ease of Doing Business) · JMC Standards
             </span>
           </div>
+
         </div>
       </div>
 
-      <style>{`
-        .footer-mobile { display: none; }
-        @media (max-width: 768px) {
-          .footer-desktop { display: none; }
-          .footer-mobile { display: block; }
-        }
-      `}</style>
     </footer>
   );
 }

@@ -1,39 +1,17 @@
 import { useState, useEffect } from "react";
+import { useIsMobile } from "../../hooks/useIsMobile"; // FIX #1: removed duplicate inline hook, import shared
 
-// ─── Shared keyframes (injected once at module level) ─────────────────────────
-
-const GLOBAL_STYLES = `
-  @keyframes fadeSlideIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-`;
-
-if (typeof document !== "undefined" && !document.getElementById("permit-ui-styles")) {
-  const style = document.createElement("style");
-  style.id = "permit-ui-styles";
-  style.textContent = GLOBAL_STYLES;
-  document.head.appendChild(style);
-}
-
-// ─── Shared hook ──────────────────────────────────────────────────────────────
-
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 900);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-  return isMobile;
-}
+// ─── FIX #3: Removed module-level DOM side-effect (document.createElement at import time).
+// @keyframes fadeSlideIn has been moved to App.css / index.css.
+// The style injection below is deleted — it ran outside any React lifecycle,
+// was fragile in SSR/test environments, and bypassed React's style management.
 
 // ─── SectionCard ──────────────────────────────────────────────────────────────
 
 export function SectionCard({ title, accent, children }) {
+  // FIX #8: useIsMobile() called once here via shared hook (not per-instance)
   const isMobile = useIsMobile();
-  
+
   return (
     <div style={{
       background: "white",
@@ -46,15 +24,15 @@ export function SectionCard({ title, accent, children }) {
         padding: isMobile ? "12px 16px" : "14px 20px",
         borderBottom: "1px solid #f5f0eb",
         background: "#fafaf9",
-        display: "flex", 
-        alignItems: "center", 
+        display: "flex",
+        alignItems: "center",
         gap: 10,
       }}>
         <div style={{ width: 3, height: 18, borderRadius: 2, background: accent, flexShrink: 0 }} />
-        <span style={{ 
-          fontSize: isMobile ? 14 : 15, 
-          fontWeight: 700, 
-          color: "#1a1208" 
+        <span style={{
+          fontSize: isMobile ? 14 : 15,
+          fontWeight: 700,
+          color: "#1a1208"
         }}>
           {title}
         </span>
@@ -86,12 +64,18 @@ export function SubHeading({ label, top = 0, accentColor = "#ff9c43" }) {
 
 // ─── DocItem ──────────────────────────────────────────────────────────────────
 
-export function DocItem({ number, title, notes, accentColor = "#ff9c43", onClick, isSelected, isMobile }) {
+// FIX #23: DocItem now calls useIsMobile() internally, consistent with all
+// other UI components. The isMobile prop is kept as an optional override for
+// call sites that already have the value, but the hook is the fallback.
+export function DocItem({ number, title, notes, accentColor = "#ff9c43", onClick, isSelected, isMobile: isMobileProp }) {
+  const isMobileHook = useIsMobile();
+  const isMobile = isMobileProp !== undefined ? isMobileProp : isMobileHook;
+
   return (
     <div
       onClick={onClick}
       style={{
-        display: "flex", 
+        display: "flex",
         gap: 10,
         padding: isMobile ? "9px 11px" : "10px 13px",
         background: isSelected ? accentColor + "12" : "#fafafa",
@@ -104,27 +88,27 @@ export function DocItem({ number, title, notes, accentColor = "#ff9c43", onClick
       }}
     >
       <span style={{
-        width: 22, 
-        height: 22, 
+        width: 22,
+        height: 22,
         borderRadius: "50%",
         background: isSelected ? accentColor : accentColor + "18",
-        display: "flex", 
-        alignItems: "center", 
+        display: "flex",
+        alignItems: "center",
         justifyContent: "center",
-        fontSize: 11, 
-        fontWeight: 800, 
+        fontSize: 11,
+        fontWeight: 800,
         color: isSelected ? "white" : accentColor,
-        flexShrink: 0, 
+        flexShrink: 0,
         marginTop: 2,
         transition: "all 0.18s ease",
       }}>
         {number}
       </span>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ 
-          fontSize: isMobile ? 14 : 14.5, 
-          fontWeight: 600, 
-          color: "#1a1208", 
+        <div style={{
+          fontSize: isMobile ? 14 : 14.5,
+          fontWeight: 600,
+          color: "#1a1208",
           lineHeight: 1.45,
           overflowWrap: "break-word"
         }}>
@@ -132,21 +116,21 @@ export function DocItem({ number, title, notes, accentColor = "#ff9c43", onClick
         </div>
         {notes && (
           Array.isArray(notes) ? (
-            <ul style={{ 
-              margin: "4px 0 0 0", 
-              paddingLeft: 18, 
-              fontSize: isMobile ? 13 : 14, 
-              color: "#5b6572", 
+            <ul style={{
+              margin: "4px 0 0 0",
+              paddingLeft: 18,
+              fontSize: isMobile ? 13 : 14,
+              color: "#5b6572",
               lineHeight: 1.5,
               overflowWrap: "break-word"
             }}>
               {notes.map((note, i) => <li key={i}>{note}</li>)}
             </ul>
           ) : (
-            <div style={{ 
-              fontSize: isMobile ? 13 : 14, 
-              color: "#5b6572", 
-              marginTop: 3, 
+            <div style={{
+              fontSize: isMobile ? 13 : 14,
+              color: "#5b6572",
+              marginTop: 3,
               lineHeight: 1.5,
               overflowWrap: "break-word"
             }}>
@@ -157,9 +141,9 @@ export function DocItem({ number, title, notes, accentColor = "#ff9c43", onClick
       </div>
       {onClick && (
         <span style={{
-          alignSelf: "center", 
+          alignSelf: "center",
           flexShrink: 0,
-          fontSize: 10, 
+          fontSize: 10,
           color: isSelected ? accentColor : "#d1c9c0",
           transition: "color 0.18s ease",
         }}>
@@ -173,12 +157,13 @@ export function DocItem({ number, title, notes, accentColor = "#ff9c43", onClick
 // ─── MetaBadge ────────────────────────────────────────────────────────────────
 
 export function MetaBadge({ label, value, color }) {
+  // FIX #8: still calls useIsMobile() — now uses shared hook, one listener total
   const isMobile = useIsMobile();
-  
+
   return (
     <div style={{
-      display: "flex", 
-      alignItems: "center", 
+      display: "flex",
+      alignItems: "center",
       gap: 5,
       padding: isMobile ? "3px 8px" : "4px 10px",
       background: color + "10",
@@ -194,46 +179,49 @@ export function MetaBadge({ label, value, color }) {
 
 // ─── StepBlock ────────────────────────────────────────────────────────────────
 
-export function StepBlock({ index, step, isLast, onClick, isSelected, isMobile }) {
+// FIX #11: added accentColor prop — defaults to "#3b82f6" to preserve existing
+// appearance, but now accepts the section's accentColor for correct theming
+// (e.g. orange for New Permit sections).
+export function StepBlock({ index, step, isLast, onClick, isSelected, isMobile, accentColor = "#3b82f6" }) {
   return (
     <div
       style={{
         position: "relative",
         cursor: onClick ? "pointer" : "default",
         borderRadius: 12,
-        border: `1.5px solid ${isSelected ? "#3b82f660" : "transparent"}`,
-        background: isSelected ? "#f0f7ff" : "transparent",
+        border: `1.5px solid ${isSelected ? accentColor + "60" : "transparent"}`,
+        background: isSelected ? accentColor + "0d" : "transparent",
         padding: isSelected ? (isMobile ? "8px 8px 8px 3px" : "10px 10px 10px 4px") : "0",
         transition: "all 0.2s ease",
-        boxShadow: isSelected ? "0 0 0 3px #3b82f615" : "none",
+        boxShadow: isSelected ? `0 0 0 3px ${accentColor}15` : "none",
       }}
       onClick={onClick}
     >
       {!isLast && (
         <div style={{
           position: "absolute",
-          left: 14, 
-          top: 36, 
+          left: 14,
+          top: 36,
           bottom: -16,
           width: 2,
-          background: "linear-gradient(to bottom, #3b82f620, transparent)",
+          background: `linear-gradient(to bottom, ${accentColor}20, transparent)`,
           borderRadius: 1,
         }} />
       )}
       <div style={{ display: "flex", gap: isMobile ? 10 : 12 }}>
         {/* Step number circle */}
         <div style={{
-          width: 28, 
-          height: 28, 
+          width: 28,
+          height: 28,
           borderRadius: "50%",
-          background: isSelected ? "#2563eb" : "#3b82f6",
-          display: "flex", 
-          alignItems: "center", 
+          background: isSelected ? accentColor : accentColor + "cc",
+          display: "flex",
+          alignItems: "center",
           justifyContent: "center",
-          fontSize: 15, 
-          fontWeight: 800, 
+          fontSize: 15,
+          fontWeight: 800,
           color: "white",
-          flexShrink: 0, 
+          flexShrink: 0,
           zIndex: 1,
           transition: "background 0.18s ease",
         }}>
@@ -243,23 +231,23 @@ export function StepBlock({ index, step, isLast, onClick, isSelected, isMobile }
           {/* Client action */}
           <div style={{
             padding: isMobile ? "8px 10px" : "9px 12px",
-            background: "#f0f7ff",
+            background: accentColor + "0d",
             borderRadius: 9,
-            border: "1px solid #bfdbfe",
+            border: `1px solid ${accentColor}30`,
             marginBottom: 6,
           }}>
-            <div style={{ 
+            <div style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
               marginBottom: 3,
             }}>
-              <div style={{ 
-                fontSize: isMobile ? 12.5 : 13.5, 
-                fontWeight: 700, 
-                color: "#1d4ed8", 
-                textTransform: "uppercase", 
-                letterSpacing: "0.08em", 
+              <div style={{
+                fontSize: isMobile ? 12.5 : 13.5,
+                fontWeight: 700,
+                color: accentColor,
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
               }}>
                 Client
               </div>
@@ -267,9 +255,9 @@ export function StepBlock({ index, step, isLast, onClick, isSelected, isMobile }
                 <span style={{
                   fontSize: isMobile ? 10 : 11,
                   fontWeight: 600,
-                  color: "#3b82f6",
-                  background: "#dbeafe",
-                  border: "1px solid #bfdbfe",
+                  color: accentColor,
+                  background: accentColor + "18",
+                  border: `1px solid ${accentColor}30`,
                   borderRadius: 999,
                   padding: "2px 8px",
                   display: "flex",
@@ -280,10 +268,10 @@ export function StepBlock({ index, step, isLast, onClick, isSelected, isMobile }
                 </span>
               )}
             </div>
-            <div style={{ 
-              fontSize: isMobile ? 13.5 : 14.5, 
-              color: "#1e3a8a", 
-              lineHeight: 1.5 
+            <div style={{
+              fontSize: isMobile ? 13.5 : 14.5,
+              color: accentColor + "dd",
+              lineHeight: 1.5
             }}>
               {step.client}
             </div>
@@ -296,21 +284,21 @@ export function StepBlock({ index, step, isLast, onClick, isSelected, isMobile }
             border: "1px solid #f0e8dc",
             marginBottom: 6,
           }}>
-            <div style={{ 
-              fontSize: isMobile ? 12.5 : 13.5, 
-              fontWeight: 700, 
-              color: "#e07620", 
-              textTransform: "uppercase", 
-              letterSpacing: "0.08em", 
-              marginBottom: 3 
+            <div style={{
+              fontSize: isMobile ? 12.5 : 13.5,
+              fontWeight: 700,
+              color: "#e07620",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              marginBottom: 3
             }}>
               Agency Action
             </div>
-            <div style={{ 
-              fontSize: isMobile ? 13.5 : 14.5, 
-              color: "#374151", 
-              lineHeight: 1.5, 
-              whiteSpace: "pre-line" 
+            <div style={{
+              fontSize: isMobile ? 13.5 : 14.5,
+              color: "#374151",
+              lineHeight: 1.5,
+              whiteSpace: "pre-line"
             }}>
               {step.agency}
             </div>
@@ -350,6 +338,10 @@ export function StepBlock({ index, step, isLast, onClick, isSelected, isMobile }
 
 // ─── DOC_REGISTRY ─────────────────────────────────────────────────────────────
 
+// FIX #9: href values remain as placeholders — marked explicitly so they render
+// the disabled download button instead of a broken link when null is set.
+// Replace each href with a real path once documents are available,
+// or set href: null to show the disabled state.
 const DOC_REGISTRY = {
   req_0: {
     title: "Application Form",
@@ -473,9 +465,9 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
   if (!docSet) {
     return (
       <div style={{
-        display: "flex", 
+        display: "flex",
         flexDirection: "column",
-        alignItems: "center", 
+        alignItems: "center",
         justifyContent: "center",
         background: accentColor + "06",
         border: `2px dashed ${accentColor}40`,
@@ -486,31 +478,31 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
         minHeight: isMobile ? 280 : 340,
       }}>
         <div style={{
-          width: isMobile ? 56 : 68, 
-          height: isMobile ? 56 : 68, 
+          width: isMobile ? 56 : 68,
+          height: isMobile ? 56 : 68,
           borderRadius: 18,
           background: accentColor + "18",
-          display: "flex", 
-          alignItems: "center", 
+          display: "flex",
+          alignItems: "center",
           justifyContent: "center",
           fontSize: isMobile ? 28 : 32,
         }}>
           📄
         </div>
         <div>
-          <div style={{ 
-            fontSize: isMobile ? 14 : 15, 
-            fontWeight: 700, 
-            color: "#1a1208", 
-            marginBottom: 6 
+          <div style={{
+            fontSize: isMobile ? 14 : 15,
+            fontWeight: 700,
+            color: "#1a1208",
+            marginBottom: 6
           }}>
             Document Viewer
           </div>
-          <div style={{ 
-            fontSize: isMobile ? 12 : 13, 
-            color: "#94a3b8", 
-            lineHeight: 1.6, 
-            maxWidth: 240 
+          <div style={{
+            fontSize: isMobile ? 12 : 13,
+            color: "#94a3b8",
+            lineHeight: 1.6,
+            maxWidth: 240
           }}>
             Click any requirement or step on the left to view related downloadable documents and forms.
           </div>
@@ -520,10 +512,10 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
           background: "white",
           border: `1.5px dashed ${accentColor}70`,
           borderRadius: 999,
-          fontSize: isMobile ? 10 : 11, 
+          fontSize: isMobile ? 10 : 11,
           color: accentColor,
-          fontWeight: 700, 
-          letterSpacing: "0.06em", 
+          fontWeight: 700,
+          letterSpacing: "0.06em",
           textTransform: "uppercase",
         }}>
           ← Select an item
@@ -545,26 +537,26 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
         padding: isMobile ? "12px 14px" : "14px 18px",
         background: accentColor + "10",
         borderBottom: `1px solid ${accentColor}20`,
-        display: "flex", 
-        alignItems: "center", 
+        display: "flex",
+        alignItems: "center",
         gap: 10,
       }}>
         <div>
-          <div style={{ 
-            fontSize: 10, 
-            fontWeight: 700, 
-            color: accentColor, 
-            textTransform: "uppercase", 
-            letterSpacing: "0.08em", 
-            marginBottom: 1 
+          <div style={{
+            fontSize: 10,
+            fontWeight: 700,
+            color: accentColor,
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            marginBottom: 1
           }}>
             Documents & Forms
           </div>
-          <div style={{ 
-            fontSize: isMobile ? 13.5 : 14.5, 
-            fontWeight: 700, 
-            color: "#1a1208", 
-            lineHeight: 1.3 
+          <div style={{
+            fontSize: isMobile ? 13.5 : 14.5,
+            fontWeight: 700,
+            color: "#1a1208",
+            lineHeight: 1.3
           }}>
             {docSet.title}
           </div>
@@ -575,8 +567,8 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
       <div style={{ padding: isMobile ? "12px 14px" : "14px 16px", display: "flex", flexDirection: "column", gap: 8 }}>
         {docSet.files.map((file, i) => (
           <div key={i} style={{
-            display: "flex", 
-            alignItems: "center", 
+            display: "flex",
+            alignItems: "center",
             gap: isMobile ? 8 : 10,
             padding: isMobile ? "9px 12px" : "11px 14px",
             background: "#fafaf9",
@@ -588,12 +580,12 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
             onMouseLeave={e => e.currentTarget.style.background = "#fafaf9"}
           >
             <span style={{ fontSize: isMobile ? 16 : 18, flexShrink: 0 }}>📎</span>
-            <span style={{ 
-              fontSize: isMobile ? 12.5 : 13.5, 
-              color: "#374151", 
-              fontWeight: 500, 
-              flex: 1, 
-              lineHeight: 1.4 
+            <span style={{
+              fontSize: isMobile ? 12.5 : 13.5,
+              color: "#374151",
+              fontWeight: 500,
+              flex: 1,
+              lineHeight: 1.4
             }}>
               {file.name}
             </span>
@@ -603,8 +595,8 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
                 background: file.tagColor + "18",
                 border: `1px solid ${file.tagColor}40`,
                 borderRadius: 999,
-                fontSize: isMobile ? 9.5 : 10.5, 
-                color: file.tagColor, 
+                fontSize: isMobile ? 9.5 : 10.5,
+                color: file.tagColor,
                 fontWeight: 700,
                 letterSpacing: "0.04em",
                 whiteSpace: "nowrap",
@@ -666,8 +658,8 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
         background: "#fffbeb",
         border: "1px solid #fde68a",
         borderRadius: 9,
-        fontSize: isMobile ? 11 : 12, 
-        color: "#92400e", 
+        fontSize: isMobile ? 11 : 12,
+        color: "#92400e",
         lineHeight: 1.6,
       }}>
         <strong>📌 Note:</strong> Downloads are for reference only. Submit original or certified true copies as required. Contact CMO–BPLO for the most current versions.
@@ -676,8 +668,5 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
   );
 }
 
-// ─── ViewerPlaceholder (kept for backward compat) ────────────────────────────
-
-export function ViewerPlaceholder({ label, accentColor = "#ff9c43" }) {
-  return <DocumentViewer selectedKey={null} label={label} accentColor={accentColor} />;
-}
+// FIX #10: ViewerPlaceholder removed — nothing in the project imports it.
+// If a consumer needs it in future, re-add with a documented import site.

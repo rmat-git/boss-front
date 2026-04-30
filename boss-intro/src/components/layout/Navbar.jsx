@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { NAV_LINKS } from "../../data/constants";
+import logo from "../../assets/logo.png";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -38,7 +39,7 @@ export default function Navbar() {
           {/* Logo */}
           <a href="#" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", flexShrink: 0 }}>
             <img
-              src="/src/assets/logo.png"
+              src={logo}
               alt="eBOSS Logo"
               style={{ width: "clamp(90px, 10vw, 120px)", height: "clamp(90px, 10vw, 140px)", objectFit: "contain" }}
               onError={e => { e.target.style.display = "none"; }}
