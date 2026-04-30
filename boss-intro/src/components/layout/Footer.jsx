@@ -67,6 +67,7 @@ export default function Footer() {
       <div style={{ padding: "clamp(32px, 5vw, 56px) clamp(1.25rem, 4vw, 2rem) 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
 
+          {/* Uses auto-fit grid — naturally responsive, no dual-DOM needed */}
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",

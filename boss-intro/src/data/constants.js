@@ -10,37 +10,6 @@ export const NAV_LINKS = [
 
 export const MOBILE_BREAKPOINT = 900;
 
-export const PHASES = [
-  {
-    number: "01",
-    title: "Register & Apply",
-    color: "#ff9c43",
-    icon: "📋",
-    desc: "Provide a valid email and upload required documents — DTI, SEC, or CDA registration, Owner's ID, and Lease Contract if your place is rented.",
-  },
-  {
-    number: "02",
-    title: "BPLO Review & Clearances",
-    color: "#3b82f6",
-    icon: "🏛️",
-    desc: "Your application is simultaneously routed to all required departments — BFP, Zoning, CHO, OBO, BENRO, and more — for concurrent approval.",
-  },
-  {
-    number: "03",
-    title: "Assessment & Payment",
-    color: "#10b981",
-    icon: "💳",
-    desc: "Receive your billing statement and pay online via GCash, PayMaya, DBP Visa, or Landbank — or settle over the counter at the Treasury Office.",
-  },
-  {
-    number: "04",
-    title: "Receive Your Permit",
-    color: "#8b5cf6",
-    icon: "📜",
-    desc: "Your digital Mayor's Permit is emailed automatically with an embedded QR code for verification. Pick up a hard copy at BPLO if preferred.",
-  },
-];
-
 export const AGENCIES = [
   "BPLO", "Bureau of Fire Protection", "Zoning Division", "City Health Office",
   "Office of the Building Official", "CENRO", "BTTMD", "City Administrator",

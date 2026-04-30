@@ -43,6 +43,7 @@ export default function VideoSection() {
               title="eBOSS EBIS 4.0 Tutorial"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
+              loading="lazy"
             />
           </div>
         </div>
