@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useInView } from "../../hooks/useInView";
 import { useIsMobile } from "../../hooks/useIsMobile"; // FIX #2: shared hook, removed inline duplicate
-import { SectionCard, SubHeading, DocItem, StepBlock, DocumentViewer } from "../ui/PermitUI";
+import { SectionCard, SubHeading, DocItem, AccordionDocItem, ClearanceItem, StepBlock, DocumentViewer } from "../ui/PermitUI";
 
 // ─── Mobile Document Viewer Modal ─────────────────────────────────────────────
 
@@ -152,7 +152,8 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor, 
 
   // FIX #6: pre-compute flat receiving items with sequential numbers before JSX return,
   // replacing the mutable `let globalReceivingCounter` that was mutated during render
-  const flatReceivingItems = Array.isArray(data.receivingDocs) && typeof data.receivingDocs[0] !== "string"
+  // Guard against missing receivingDocs (online flow uses submissionNote instead)
+  const flatReceivingItems = Array.isArray(data.receivingDocs) && data.receivingDocs.length > 0 && typeof data.receivingDocs[0] !== "string"
     ? data.receivingDocs.flatMap((group) => group.items.map((doc) => ({ ...doc, groupLabel: group.groupLabel })))
     : [];
 
@@ -269,27 +270,104 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor, 
           alignItems: "start",
         }}>
 
-          {/* Left: Requirements + Procedure */}
+          {/* Left: Requirements (Desktop) | Right: Procedure (Mobile — swapped via order) */}
           {/* MOBILE STRETCH FIX: Added minWidth: 0 to the flex column wrapper */}
-          <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 16 : 22, minWidth: 0 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 16 : 22, minWidth: 0, order: isMobile ? 2 : 1 }}>
 
             <SectionCard title="Checklist of Requirements" accent={accentColor}>
               <SubHeading label="For Encoding" accentColor={accentColor} />
-              {data.encodingDocs.map((doc, i) => {
-                const key = `${reqPrefix}_${i}`;
-                return (
-                  <DocItem
-                    key={key}
-                    number={i + 1}
-                    title={doc.title}
-                    notes={doc.notes}
-                    accentColor={accentColor}
-                    onClick={() => handleDocClick(key)}
-                    isSelected={selectedKey === key}
-                    isMobile={isMobile}
-                  />
-                );
-              })}
+              {(() => {
+                // Track sequential number only for non-clearance items
+                let counter = 0;
+                return data.encodingDocs.map((doc, i) => {
+                  const key = `${reqPrefix}_${i}`;
+
+                  // ── Clearance group (Required / Special) — new permit only ──
+                  if (!isRenewal && doc.type === "clearance_group") {
+                    const isSpecial = doc.subtitle !== undefined;
+                    return (
+                      <div key={key} style={{ marginBottom: 10 }}>
+                        {/* Sub-section divider */}
+                        <div style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                          margin: "14px 0 8px",
+                        }}>
+                          <div style={{
+                            width: 3,
+                            height: 14,
+                            borderRadius: 2,
+                            background: isSpecial ? "#f59e0b" : accentColor,
+                            flexShrink: 0,
+                          }} />
+                          <div>
+                            <div style={{
+                              fontSize: isMobile ? 11 : 11.5,
+                              fontWeight: 800,
+                              color: isSpecial ? "#b45309" : accentColor,
+                              textTransform: "uppercase",
+                              letterSpacing: "0.09em",
+                            }}>
+                              {doc.title}
+                            </div>
+                            {doc.subtitle && (
+                              <div style={{
+                                fontSize: isMobile ? 10 : 10.5,
+                                color: "#94a3b8",
+                                fontWeight: 500,
+                                marginTop: 1,
+                              }}>
+                                {doc.subtitle}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {/* Individual clearance rows */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                          {doc.items.map((item) => (
+                            <ClearanceItem
+                              key={item.key}
+                              title={item.title}
+                              office={item.office}
+                              accentColor={isSpecial ? "#f59e0b" : accentColor}
+                              onClick={() => handleDocClick(item.key)}
+                              isSelected={selectedKey === item.key}
+                              isMobile={isMobile}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  // ── Regular doc item ──
+                  counter += 1;
+                  const num = counter;
+                  return isRenewal ? (
+                    <DocItem
+                      key={key}
+                      number={num}
+                      title={doc.title}
+                      notes={doc.notes}
+                      accentColor={accentColor}
+                      onClick={() => handleDocClick(key)}
+                      isSelected={selectedKey === key}
+                      isMobile={isMobile}
+                    />
+                  ) : (
+                    <AccordionDocItem
+                      key={key}
+                      number={num}
+                      title={doc.title}
+                      accentColor={accentColor}
+                      onDocClick={() => handleDocClick(key)}
+                      isDocSelected={selectedKey === key}
+                      isMobile={isMobile}
+                    />
+                  );
+                });
+              })()}
 
               <div style={{
                 marginTop: 14,
@@ -316,92 +394,88 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor, 
                 </div>
               </div>
 
-              <SubHeading label="Upon Receiving / Submission" top={18} accentColor={accentColor} />
+              {/* Walk-in receiving docs — only rendered when receivingDocs exists */}
+              {data.receivingDocs && (
+                <>
+                  <SubHeading label="Upon Receiving / Submission" top={18} accentColor={accentColor} />
 
-              {/* FIX #6: replaced mutable let counter with pre-computed flatReceivingItems */}
-              {typeof data.receivingDocs[0] === "string"
-                ? data.receivingDocs.map((doc, i) => (
-                    <DocItem
-                      key={i}
-                      number={i + 1}
-                      title={doc}
-                      notes={null}
-                      accentColor={accentColor}
-                      isMobile={isMobile}
-                    />
-                  ))
-                : data.receivingDocs.map((group, gi) => (
-                    <div key={gi}>
-                      {group.groupLabel && (
-                        <div style={{
-                          margin: gi === 0 ? "0 0 8px 0" : "16px 0 8px 0",
-                          padding: "6px 12px",
-                          background: accentColor + "12",
-                          border: `1px solid ${accentColor}30`,
-                          borderRadius: 8,
-                          fontSize: isMobile ? 10.5 : 11.5,
-                          fontWeight: 700,
-                          color: accentColor,
-                          letterSpacing: "0.07em",
-                          textTransform: "uppercase",
-                        }}>
-                          📂 {group.groupLabel}
+                  {/* FIX #6: replaced mutable let counter with pre-computed flatReceivingItems */}
+                  {typeof data.receivingDocs[0] === "string"
+                    ? data.receivingDocs.map((doc, i) => (
+                        <DocItem
+                          key={i}
+                          number={i + 1}
+                          title={doc}
+                          notes={null}
+                          accentColor={accentColor}
+                          isMobile={isMobile}
+                        />
+                      ))
+                    : data.receivingDocs.map((group, gi) => (
+                        <div key={gi}>
+                          {group.groupLabel && (
+                            <div style={{
+                              margin: gi === 0 ? "0 0 8px 0" : "16px 0 8px 0",
+                              padding: "6px 12px",
+                              background: accentColor + "12",
+                              border: `1px solid ${accentColor}30`,
+                              borderRadius: 8,
+                              fontSize: isMobile ? 10.5 : 11.5,
+                              fontWeight: 700,
+                              color: accentColor,
+                              letterSpacing: "0.07em",
+                              textTransform: "uppercase",
+                            }}>
+                              📂 {group.groupLabel}
+                            </div>
+                          )}
+                          {group.items.map((doc) => {
+                            const flatIndex = flatReceivingItems.findIndex(
+                              (f) => f === doc || (f.title === doc.title && f.groupLabel === group.groupLabel)
+                            );
+                            const number = flatIndex + 1;
+                            return (
+                              <DocItem
+                                key={number}
+                                number={number}
+                                title={doc.title}
+                                notes={doc.notes}
+                                accentColor={accentColor}
+                                isMobile={isMobile}
+                              />
+                            );
+                          })}
                         </div>
-                      )}
-                      {group.items.map((doc) => {
-                        // FIX #6: index derived from pre-computed flat list — no mutation during render
-                        const flatIndex = flatReceivingItems.findIndex(
-                          (f) => f === doc || (f.title === doc.title && f.groupLabel === group.groupLabel)
-                        );
-                        const number = flatIndex + 1;
-                        return (
-                          <DocItem
-                            key={number}
-                            number={number}
-                            title={doc.title}
-                            notes={doc.notes}
-                            accentColor={accentColor}
-                            isMobile={isMobile}
-                          />
-                        );
-                      })}
+                      ))
+                  }
+
+                  <div style={{
+                    marginTop: 14,
+                    padding: isMobile ? "11px 13px" : "13px 15px",
+                    background: "#eff6ff",
+                    border: "1px solid #bfdbfe",
+                    borderRadius: 10,
+                    fontSize: isMobile ? 13 : 14,
+                    color: "#1e3a8a",
+                    lineHeight: 1.65,
+                  }}>
+                    <div style={{ fontWeight: 700, marginBottom: 6 }}>📥 Upon Submission:</div>
+                    <div style={{ marginBottom: 5 }}>
+                      <span style={{ fontWeight: 600 }}>Present originals </span>
+                      together with <span style={{ fontWeight: 600 }}>one (1) photocopy each</span> of all encoded requirements at the receiving window.
                     </div>
-                  ))
-              }
+                    <div>
+                      <span style={{ fontWeight: 600 }}>Receiving officer</span> will verify completeness before issuing your <span style={{ fontWeight: 600 }}>Official Receipt</span> and Order of Payment.
+                    </div>
+                  </div>
+                </>
+              )}
 
-              <div style={{
-                marginTop: 14,
-                padding: isMobile ? "11px 13px" : "13px 15px",
-                background: "#eff6ff",
-                border: "1px solid #bfdbfe",
-                borderRadius: 10,
-                fontSize: isMobile ? 13 : 14,
-                color: "#1e3a8a",
-                lineHeight: 1.65,
-              }}>
-                <div style={{ fontWeight: 700, marginBottom: 6 }}>📥 Upon Submission:</div>
-                <div style={{ marginBottom: 5 }}>
-                  <span style={{ fontWeight: 600 }}>Present originals </span>
-                  together with <span style={{ fontWeight: 600 }}>one (1) photocopy each</span> of all encoded requirements at the receiving window.
-                </div>
-                <div>
-                  <span style={{ fontWeight: 600 }}>Receiving officer</span> will verify completeness before issuing your <span style={{ fontWeight: 600 }}>Official Receipt</span> and Order of Payment.
-                </div>
-              </div>
-
-              <div style={{
-                marginTop: 12,
-                padding: isMobile ? "10px 12px" : "11px 14px",
-                background: "#f0fdf4",
-                border: "1px solid #86efac",
-                borderRadius: 10,
-                fontSize: isMobile ? 13 : 14,
-                color: "#14532d",
-                lineHeight: 1.6,
-              }}>
-                <span style={{ fontWeight: 700 }}>📍 Where to Secure: </span>{data.whereToSecure}
-              </div>
             </SectionCard>
+          </div>
+
+          {/* Right: Procedure (Desktop) | Left: Requirements (Mobile — swapped via order) */}
+          <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 16 : 22, minWidth: 0, order: isMobile ? 1 : 2 }}>
 
             <SectionCard title="Procedure Flow" accent="#3b82f6">
               <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 14 : 18 }}>
@@ -453,19 +527,51 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor, 
               </div>
             </SectionCard>
           </div>
+        </div>
 
-          {/* Right: sticky Document Viewer — desktop only, replaced by modal on mobile */}
-          {!isMobile && (
-            <div style={{ position: "sticky", top: 140 }}>
-              <SectionCard title="Documents & Forms" accent={accentColor}>
-                <DocumentViewer
-                  selectedKey={selectedKey}
-                  label={`${data.label} documents`}
-                  accentColor={accentColor}
-                />
-              </SectionCard>
+        {/* Full-width: How to Submit */}
+        {data.submissionNote && (
+          <div style={{ marginTop: 28 }}>
+            <SubHeading label="How to Submit" accentColor={accentColor} />
+            <div style={{
+              marginTop: 12,
+              padding: isMobile ? "14px 16px" : "16px 20px",
+              background: "#eff6ff",
+              border: "1px solid #bfdbfe",
+              borderRadius: 10,
+              fontSize: isMobile ? 13 : 14,
+              color: "#1e3a8a",
+              lineHeight: 1.65,
+            }}>
+              <div style={{ fontWeight: 700, marginBottom: 6 }}>📧 Email your requirements to:</div>
+              <div style={{ marginBottom: 4 }}>
+                <a href={`mailto:${data.submissionNote.email}`} style={{ color: accentColor, fontWeight: 700 }}>
+                  {data.submissionNote.email}
+                </a>
+              </div>
+              <div style={{ marginBottom: 4 }}>
+                <span style={{ fontWeight: 600 }}>Subject: </span>
+                {data.submissionNote.subject}
+              </div>
+              <div style={{ fontSize: isMobile ? 11.5 : 12.5, color: "#64748b", marginTop: 6 }}>
+                In accordance with {data.submissionNote.reference}
+              </div>
             </div>
-          )}
+          </div>
+        )}
+
+        {/* Full-width: Where to Secure */}
+        <div style={{
+          marginTop: data.submissionNote ? 16 : 0,
+          padding: isMobile ? "12px 14px" : "14px 18px",
+          background: "#f0fdf4",
+          border: "1px solid #86efac",
+          borderRadius: 10,
+          fontSize: isMobile ? 13 : 14,
+          color: "#14532d",
+          lineHeight: 1.6,
+        }}>
+          <span style={{ fontWeight: 700 }}>📍 Where to Secure: </span>{data.whereToSecure}
         </div>
 
         {/* RA 11032 Note */}
@@ -485,8 +591,8 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor, 
         </div>
       </div>
 
-      {/* Mobile modal — floats above everything, outside the grid */}
-      {isMobile && modalOpen && selectedKey && (
+      {/* Modal — appears on both desktop and mobile when requirement is clicked */}
+      {modalOpen && selectedKey && (
         <DocModal
           selectedKey={selectedKey}
           label={`${data.label} documents`}

@@ -16,60 +16,81 @@ export const AGENCIES = [
   "City Veterinarian", "City Agriculture", "Tourism Office",
 ];
 
+// ─── BPLO Contact Info ────────────────────────────────────────────────────────
+
+export const BPLO_CONTACT = {
+  email: "bplo_register@bacolodcity.gov.ph",
+  tel: "4352606",
+  portal: "https://ebpls.bacolodcity.gov.ph/",
+  office: "Office of the City Mayor - Permits and License Division",
+};
+
+// ─── Permit Data ──────────────────────────────────────────────────────────────
+
 export const PERMIT_DATA = {
+
+  // ── New Business Permit (Online Application) ────────────────────────────────
   new: {
     label: "New Business Permit",
-    office: "City Mayor's Office - Permits and License Division",
+    office: "Office of the City Mayor - Permits and License Division",
     classification: "Simple",
     transaction: "G2B - Government to Business Entity",
     whoMayAvail: "All Business Owners",
-    totalTime: "2 hours and 30 minutes",
+    totalTime: "TBD", // placeholder — no processing time stated in online reference
+
+    // Documents required at encoding/submission — grouped by category
     encodingDocs: [
-      { title: "Duly Filled-Up & Signed Application Form", notes: null },
       {
-        title: "Business Registration Certificate",
+        title: "Proof of Registration",
         notes: [
-          "DTI for Single Proprietorship (original & photocopy)",
-          "SEC Registration with Articles of Inc. for Corporation/Association/Partnership/OPC (original & photocopy) — include updated GIS from SEC if registration is not recent",
-          "CDA Registration for Cooperatives (original & photocopy)",
+          "Issued by SEC for all kinds of Corporations, Associations and Partnership",
+          "Issued by DTI for Sole / Single Proprietor",
+          "Issued by the Cooperative Development Authority for Cooperatives",
+          "Other Requirements if applicable: Franchise Agreement, Intellectual Property Office (IPO) registration, etc.",
         ],
       },
       {
-        title: "Proof of Business Location",
+        title: "Proof of Right of Applicant to use location as business address",
         notes: [
-          "If renting: Notarized Contract of Lease",
-          "If not renting: Notarized Affidavit of Non-rental (sole prop) / Secretary's Certificate (corp.) / Proof of ownership",
+          "If owned: Proof of ownership – Tax Declaration / Land Tax Receipt or Building Permit",
+          "If not owned by the applicant: Contract of Lease / Memorandum of Agreement / Affidavit of Consent or Conformity from the property owner supported by Proof of ownership or CENTENARIO",
         ],
       },
       {
-        title: "Franchise / Tradename Documents (if applicable)",
+        title: "Valid Identification (ID) Card",
         notes: [
-          "Franchise Agreement / Certificate of Dealership / IPO Registration if the business will use another tradename rather than its own",
+          "ID Card of the Owner",
+          "If applicable: ID of Authorized Representative with supporting SPA or Secretary Certificate",
         ],
       },
       {
         title: "Required Clearances",
-        notes: [
-          "BARANGAY",
-          "ZONING",
-          "CITY HEALTH OFFICE Clearance / Sanitary Permit to Operate (original & photocopy)",
-          "ENRO",
-          "OBO",
+        type: "clearance_group",
+        items: [
+          { title: "Barangay Clearance", office: "Barangay Hall", key: "req_clearance_0" },
+          { title: "Fire Safety Inspection Certificate (FSIC)", office: "Bureau of Fire Protection (BFP)", key: "req_clearance_1" },
+          { title: "Zoning Clearance", office: "Zoning Division", key: "req_clearance_2" },
+          { title: "City Health Office Clearance / Sanitary Permit to Operate", office: "City Health Office", key: "req_clearance_3" },
+          { title: "Office of the Building Official (OBO) Clearance", office: "Office of the Building Official", key: "req_clearance_4" },
+          { title: "CENRO Clearance", office: "CENRO", key: "req_clearance_5" },
         ],
       },
       {
-        title: "Special Clearances (as applicable by business type)",
-        notes: [
-          "Agri Products / Agriculture related → City Agriculture Office",
-          "Cooperatives → City Cooperatives and Livelihood Development Office",
-          "Meat and Poultry products → City Veterinary Office",
-          "Tourism Related → City Tourism Office",
-          "3 Major Markets & Manukan Country → City Ad Clearance",
-          "EGAMES, Cockfighting and the like → valid Resolution of No Objection (RONO) from SP",
+        title: "Special Clearances",
+        type: "clearance_group",
+        subtitle: "As applicable by business type",
+        items: [
+          { title: "City Agriculture Office Clearance", office: "Agri Products / Agriculture related", key: "req_special_0" },
+          { title: "City Veterinary Office Clearance", office: "Meat and Poultry products", key: "req_special_1" },
+          { title: "City Tourism Office Clearance", office: "Tourism Related", key: "req_special_2" },
+          { title: "City Administrator Clearance", office: "3 Major Markets & Manukan Country", key: "req_special_3" },
+          { title: "BTTMD Clearance", office: "BTTMD-regulated businesses", key: "req_special_4" },
+          { title: "Resolution of No Objection (RONO)", office: "EGAMES, Cockfighting and the like — from SP", key: "req_special_5" },
         ],
       },
-      { title: "Owner's Valid ID with Specimen Signature (clear photocopy)", notes: null },
     ],
+
+    // Proxy / authorized representative requirements — kept from walk-in reference
     proxyNote: {
       toProcess: ["Authorization letter", "ID of grantor and Authorized Representative"],
       toSign: [
@@ -78,18 +99,22 @@ export const PERMIT_DATA = {
         "Corp/Companies: Company ID with designation of Grantor and Authorized Representative (in the absence of company ID with designation, any valid ID must be supported with recent General Information Sheet or GIS)",
       ],
     },
-    receivingDocs: [
-      "Submit business application form with attached documentary requirements",
-      "Assessment Form with Official Receipt (Original)",
-      "VALID Fire Safety Inspection Certificate (FSIC) from the Bureau of Fire Protection (BFP) — original & photocopy",
-    ],
-    whereToSecure: "CMO Permits & Licensing Office",
+
+    // Online submission note — replaces walk-in receiving docs
+    submissionNote: {
+      email: BPLO_CONTACT.email,
+      subject: "REQUIREMENTS FOR NEW BUSINESS SUBMISSION",
+      reference: "ARTA DTI DIL G DICT Joint Memorandum Circular No. 1 Series of 2021",
+    },
+
+    whereToSecure: "CMO - Permits & Licensing Office / Online via ebpls.bacolodcity.gov.ph",
+
     steps: [
       {
-        client: "Secure Business Application Form from BPLO and process the necessary requirements and clearances.",
-        agency: "BPLO Frontliner accepts application and evaluates completeness of documents submitted for encoding and instructs the client to process the necessary requirements/clearances.",
+        client: "Fill in the Online Application at https://ebpls.bacolodcity.gov.ph/ and email the required documents to bplo_register@bacolodcity.gov.ph with the subject 'REQUIREMENTS FOR NEW BUSINESS SUBMISSION'.",
+        agency: "BPLO receives and evaluates the online application and emailed documentary requirements for completeness.",
         fees: "None",
-        time: "1 hour",
+        time: "—",
         responsible: [
           "Reah Marie P. Rom — License Inspector II",
           "Winnie C. Pabalinas — Licensing Officer I",
@@ -97,17 +122,21 @@ export const PERMIT_DATA = {
         ],
       },
       {
-        client: "Proceed to City Treasurer's Office–License Division for assessment and payment, then return to CMO–Permits and License Division to present the Official Receipt as proof of payment.",
-        agency: "BPLO receives and reviews all submitted documents prior to printing of Mayor's Permit and verification by the BPLO Head.",
-        fees: "c/o CTO",
-        time: "30 minutes",
-        responsible: ["CTO Assessment Officer", "CTO Cashier"],
+        client: "Check the email provided for the soft copy of your application and the link for tracking clearance status.",
+        agency: "BPLO sends the applicant a soft copy of the application along with instructions and a tracking link for clearances.",
+        fees: "—",
+        time: "—",
+        responsible: [
+          "Reah Marie P. Rom — License Inspector II",
+          "Winnie C. Pabalinas — Licensing Officer I",
+          "Mary Ann D. Eder — Clerk III",
+        ],
       },
       {
-        client: "Receive the Mayor's Permit.",
-        agency: "3.1 BPLO Head approves the Mayor's Permit.\n3.2 BPLO Frontliner releases the approved Mayor's Permit.",
-        fees: "None",
-        time: "30 minutes – 1 hour",
+        client: "Monitor clearance tracking link. Complete all pending clearances and payment. Receive the e-copy of the Mayor's Permit via email, or claim the hard copy at the Permits and Licensing Division office.",
+        agency: "BPLO issues the e-copy of the Mayor's Permit upon completion of all clearances and full payment. Hard copy may be claimed at the office.",
+        fees: "c/o CTO",
+        time: "—",
         responsible: [
           "Printing: Virman T. Akol — Clerk III",
           "Recommending Approval: Stela Rose J. Rayos — Licensing Officer IV",
@@ -116,19 +145,60 @@ export const PERMIT_DATA = {
       },
     ],
   },
+
+  // ── Renewal of Business Permit (Online Application) ─────────────────────────
   renewal: {
     label: "Renewal of Business Permit",
-    office: "City Mayor's Office - Permits and License Division",
+    office: "Office of the City Mayor - Permits and License Division",
     classification: "Simple",
     transaction: "G2B - Government to Business Entity",
     whoMayAvail: "All Business Owners",
-    totalTime: "4 hours",
+    totalTime: "TBD", // placeholder — online renewal time TBD
+
+    // Only the previous year's Mayor's Permit needed to start — kept simple
     encodingDocs: [
       {
         title: "Previous Year's Mayor's Permit",
-        notes: "Present Original or Photocopy — with Valid ID (if owner) or Authorization Letter / SPA with ID of owner and ID of the representative (if authorized representative)",
+        notes: [
+          "Present Original or Photocopy",
+          "With Valid ID (if owner) or Authorization Letter / SPA with ID of owner and ID of the representative (if authorized representative)",
+        ],
+      },
+      {
+        title: "Required Clearances (for all businesses)",
+        notes: [
+          "Barangay Clearance",
+          "Fire Safety Inspection Certificate (FSIC) — Bureau of Fire Protection (BFP)",
+          "Zoning Clearance — Zoning Division",
+          "City Health Office Clearance / Sanitary Permit to Operate",
+          "Office of the Building Official (OBO) Clearance",
+          "CENRO Clearance",
+        ],
+      },
+      {
+        title: "Special Clearances (as applicable by business type)",
+        notes: [
+          "Agri Products / Agriculture related → City Agriculture Office",
+          "Meat and Poultry products → City Veterinary Office",
+          "Tourism Related → City Tourism Office",
+          "3 Major Markets & Manukan Country → City Administrator Clearance",
+          "BTTMD-regulated businesses → BTTMD Clearance",
+          "EGAMES, Cockfighting and the like → valid Resolution of No Objection (RONO) from SP",
+        ],
+      },
+      {
+        title: "Other Supporting Documents (as applicable)",
+        notes: [
+          "Security Agencies → Valid License to Operate from Camp Crame NCR",
+          "Firearms and Ammunitions → Valid License to Operate from Camp Crame",
+          "Recruitment Agencies (Abroad) → Valid License to Operate from POEA",
+          "Manpower Services (Local) → Valid Certificate of Registration from DOLE",
+          "Pawnshops, Money Service Businesses, Remittance & Transfer Company, Money Changers and Foreign Exchange → Valid Certificate of Registration from Bangko Sentral ng Pilipinas (BSP)",
+        ],
       },
     ],
+
+    // Proxy / authorized representative requirements — same as new
     proxyNote: {
       toProcess: ["Authorization letter", "ID of grantor and Authorized Representative"],
       toSign: [
@@ -137,68 +207,50 @@ export const PERMIT_DATA = {
         "Corp/Companies: Company ID with designation of Grantor and Authorized Representative (in the absence of company ID with designation, any valid ID must be supported with recent General Information Sheet or GIS)",
       ],
     },
-    receivingDocs: [
-      {
-        groupLabel: null,
-        items: [
-          {
-            title: "Duly Signed Pre-printed Application Form with Clearances",
-            notes: ["BARANGAY", "ZONING", "CITY HEALTH OFFICE Clearance / Sanitary Permit to Operate (original & photocopy)", "ENRO", "OBO"],
-          },
-          {
-            title: "VALID Fire Safety Inspection Certificate (FSIC)",
-            notes: "From Bureau of Fire Protection (BFP) — original & photocopy",
-          },
-          {
-            title: "Assessment Form with Official Receipt",
-            notes: null,
-          },
-        ],
-      },
-      {
-        groupLabel: "Special Clearances (as applicable by business type)",
-        items: [
-          { title: "Agri Products / Agriculture related", notes: "City Agriculture Office" },
-          { title: "Cooperatives", notes: "City Cooperatives and Livelihood Development Office" },
-          { title: "Meat and Poultry Products", notes: "City Veterinary Office" },
-          { title: "Tourism Related", notes: "City Tourism Office" },
-          { title: "3 Major Markets & Manukan Country", notes: "City Ad Clearance" },
-        ],
-      },
-      {
-        groupLabel: "Other Supporting Documents (as applicable)",
-        items: [
-          { title: "Security Agencies", notes: "Valid License to Operate from Camp Crame NCR" },
-          { title: "Firearms and Ammunitions", notes: "Valid License to Operate from Camp Crame" },
-          { title: "Recruitment Agencies (Abroad)", notes: "Valid License to Operate from POEA" },
-          { title: "Manpower Services (Local)", notes: "Valid Certificate of Registration from DOLE" },
-          { title: "Pawnshops, Money Service Businesses, Remittance & Transfer Company, Money Changers and Foreign Exchange", notes: "Valid Certificate of Registration from Bangko Sentral ng Pilipinas (BSP)" },
-          { title: "EGAMES, Cockfighting and the like", notes: "Valid Resolution of No Objection (RONO) from SP" },
-        ],
-      },
-    ],
-    whereToSecure: "CMO - Permits & Licensing Office",
+
+    // Online submission note — mirrors new application
+    submissionNote: {
+      email: BPLO_CONTACT.email,
+      subject: "REQUIREMENTS FOR BUSINESS RENEWAL SUBMISSION",
+      reference: "ARTA DTI DIL G DICT Joint Memorandum Circular No. 1 Series of 2021",
+    },
+
+    whereToSecure: "CMO - Permits & Licensing Office / Online via ebpls.bacolodcity.gov.ph",
+
     steps: [
       {
-        client: "Secure Business Application Form from BPLO.",
-        agency: "1.1 BPLO Frontliner accepts application and evaluates completeness of documents submitted for encoding.\n1.2 Advise the client to either proceed to Assessment and pay, or process the necessary requirements and clearances.",
-        fees: "c/o CTO–License Division",
-        time: "1–2 hours",
-        responsible: "Reah Marie P. Rom — License Inspector II · Winnie C. Pabalinas — Licensing Officer I · Mary Ann D. Eder — Clerk III · c/o CTO–License Division",
+        client: "Fill in the Online Renewal Application at https://ebpls.bacolodcity.gov.ph/ and email the required documents to bplo_register@bacolodcity.gov.ph with the subject 'REQUIREMENTS FOR BUSINESS RENEWAL SUBMISSION'.",
+        agency: "BPLO receives and evaluates the online renewal application and emailed documentary requirements for completeness.",
+        fees: "None",
+        time: "—",
+        responsible: [
+          "Reah Marie P. Rom — License Inspector II",
+          "Winnie C. Pabalinas — Licensing Officer I",
+          "Mary Ann D. Eder — Clerk III",
+          "c/o CTO — License Division",
+        ],
       },
       {
-        client: "Submit the application form with attached complete requirements and Assessment Form or Official Receipt as proof of payment.",
-        agency: "BPLO receives and reviews all submitted documents prior to printing of Mayor's Permit and verification by the Head.",
+        client: "Check the email provided for the soft copy of your application and the link for tracking clearance status.",
+        agency: "BPLO sends the applicant a soft copy of the renewal application along with instructions and a tracking link for clearances.",
         fees: "—",
         time: "—",
-        responsible: "BPLO Review Staff",
+        responsible: [
+          "Reah Marie P. Rom — License Inspector II",
+          "Winnie C. Pabalinas — Licensing Officer I",
+          "Mary Ann D. Eder — Clerk III",
+        ],
       },
       {
-        client: "Receive the Mayor's Permit.",
-        agency: "3.1 BPLO Head approves the Mayor's Permit.\n3.2 BPLO Frontliner releases the approved Mayor's Permit.",
-        fees: "None",
-        time: "1 hour",
-        responsible: "Printing: Virman T. Akol — Clerk III · Recommending Approval: Stela Rose J. Rayos — Licensing Officer IV · Release: BPLO Frontliners",
+        client: "Monitor clearance tracking link. Complete all pending clearances and payment. Receive the e-copy of the renewed Mayor's Permit via email, or claim the hard copy at the Permits and Licensing Division office.",
+        agency: "BPLO issues the e-copy of the renewed Mayor's Permit upon completion of all clearances and full payment. Hard copy may be claimed at the office.",
+        fees: "c/o CTO",
+        time: "—",
+        responsible: [
+          "Printing: Virman T. Akol — Clerk III",
+          "Recommending Approval: Stela Rose J. Rayos — Licensing Officer IV",
+          "Release: BPLO Frontliners",
+        ],
       },
     ],
   },

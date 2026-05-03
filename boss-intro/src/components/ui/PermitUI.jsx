@@ -154,6 +154,166 @@ export function DocItem({ number, title, notes, accentColor = "#ff9c43", onClick
   );
 }
 
+// ─── AccordionDocItem ─────────────────────────────────────────────────────────
+//
+// Header-only row for the New Permit encodingDocs list.
+// • Shows title + original ▶ arrow only — no inline bullet expansion.
+// • Clicking loads the item's bullets + downloadable files into the right panel
+//   (desktop) or the modal (mobile) via onDocClick.
+// • isDocSelected drives the selected highlight state (mirrors DocItem behaviour).
+
+export function AccordionDocItem({
+  number,
+  title,
+  accentColor = "#ff9c43",
+  onDocClick,
+  isDocSelected,
+  isMobile: isMobileProp,
+}) {
+  const isMobileHook = useIsMobile();
+  const isMobile = isMobileProp !== undefined ? isMobileProp : isMobileHook;
+
+  return (
+    <div
+      onClick={onDocClick}
+      style={{
+        display: "flex",
+        gap: 10,
+        padding: isMobile ? "9px 11px" : "10px 13px",
+        background: isDocSelected ? accentColor + "12" : "#fafafa",
+        borderRadius: 9,
+        border: `1px solid ${isDocSelected ? accentColor + "60" : "#f0e8dc"}`,
+        marginBottom: 6,
+        cursor: "pointer",
+        transition: "all 0.18s ease",
+        boxShadow: isDocSelected ? `0 0 0 2px ${accentColor}25` : "none",
+        userSelect: "none",
+      }}
+      onMouseEnter={e => { if (!isDocSelected) e.currentTarget.style.background = accentColor + "08"; }}
+      onMouseLeave={e => { if (!isDocSelected) e.currentTarget.style.background = "#fafafa"; }}
+    >
+      {/* Number badge */}
+      <span style={{
+        width: 22,
+        height: 22,
+        borderRadius: "50%",
+        background: isDocSelected ? accentColor : accentColor + "18",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: 11,
+        fontWeight: 800,
+        color: isDocSelected ? "white" : accentColor,
+        flexShrink: 0,
+        marginTop: 2,
+        transition: "all 0.18s ease",
+      }}>
+        {number}
+      </span>
+
+      {/* Title */}
+      <div style={{
+        flex: 1,
+        fontSize: isMobile ? 14 : 14.5,
+        fontWeight: 600,
+        color: "#1a1208",
+        lineHeight: 1.45,
+        overflowWrap: "break-word",
+        alignSelf: "center",
+      }}>
+        {title}
+      </div>
+
+      {/* Original ▶ arrow */}
+      <span style={{
+        alignSelf: "center",
+        flexShrink: 0,
+        fontSize: 10,
+        color: isDocSelected ? accentColor : "#d1c9c0",
+        transition: "color 0.18s ease",
+      }}>
+        ▶
+      </span>
+    </div>
+  );
+}
+
+// ─── ClearanceItem ────────────────────────────────────────────────────────────
+//
+// Compact clickable row for individual clearance entries inside the
+// Required Clearances / Special Clearances sub-sections.
+// Shows the clearance name + issuing office, fires onClick to load right panel.
+
+export function ClearanceItem({ title, office, accentColor = "#ff9c43", onClick, isSelected, isMobile: isMobileProp }) {
+  const isMobileHook = useIsMobile();
+  const isMobile = isMobileProp !== undefined ? isMobileProp : isMobileHook;
+
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        padding: isMobile ? "7px 10px" : "8px 12px",
+        background: isSelected ? accentColor + "12" : "#fafafa",
+        borderRadius: 8,
+        border: `1px solid ${isSelected ? accentColor + "55" : "#f0e8dc"}`,
+        cursor: "pointer",
+        transition: "all 0.15s ease",
+        boxShadow: isSelected ? `0 0 0 2px ${accentColor}20` : "none",
+        userSelect: "none",
+      }}
+      onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = accentColor + "08"; }}
+      onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = "#fafafa"; }}
+    >
+      {/* Dot indicator */}
+      <span style={{
+        width: 7,
+        height: 7,
+        borderRadius: "50%",
+        background: isSelected ? accentColor : accentColor + "50",
+        flexShrink: 0,
+        transition: "background 0.15s ease",
+      }} />
+
+      {/* Text */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{
+          fontSize: isMobile ? 12.5 : 13,
+          fontWeight: 600,
+          color: isSelected ? accentColor : "#1a1208",
+          lineHeight: 1.35,
+          overflowWrap: "break-word",
+          transition: "color 0.15s ease",
+        }}>
+          {title}
+        </div>
+        {office && (
+          <div style={{
+            fontSize: isMobile ? 11 : 11.5,
+            color: "#94a3b8",
+            marginTop: 1,
+            lineHeight: 1.3,
+          }}>
+            {office}
+          </div>
+        )}
+      </div>
+
+      {/* Arrow */}
+      <span style={{
+        flexShrink: 0,
+        fontSize: 10,
+        color: isSelected ? accentColor : "#d1c9c0",
+        transition: "color 0.15s ease",
+      }}>
+        ▶
+      </span>
+    </div>
+  );
+}
+
 // ─── MetaBadge ────────────────────────────────────────────────────────────────
 
 export function MetaBadge({ label, value, color }) {
@@ -338,69 +498,151 @@ export function StepBlock({ index, step, isLast, onClick, isSelected, isMobile, 
 
 // ─── DOC_REGISTRY ─────────────────────────────────────────────────────────────
 
-// FIX #9: href values remain as placeholders — marked explicitly so they render
-// the disabled download button instead of a broken link when null is set.
-// Replace each href with a real path once documents are available,
-// or set href: null to show the disabled state.
 const DOC_REGISTRY = {
   req_0: {
-    title: "Application Form",
+    title: "Proof of Registration",
     icon: "📋",
+    notes: [
+      "Issued by SEC for all kinds of Corporations, Associations and Partnership",
+      "Issued by DTI for Sole / Single Proprietor",
+      "Issued by the Cooperative Development Authority for Cooperatives",
+      "Other Requirements if applicable: Franchise Agreement, Intellectual Property Office (IPO) registration, etc.",
+    ],
     files: [
       { name: "Business Application Form (PDF)", tag: "Required", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
       { name: "Instructions for Filling Out the Form", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
     ],
   },
   req_1: {
-    title: "Business Registration Certificate",
-    icon: "🏢",
-    files: [
-      { name: "DTI Registration Guide", tag: "Info", tagColor: "#64748b", href: "/downloads/reference.pdf" },
-      { name: "SEC Registration Checklist", tag: "Checklist", tagColor: "#10b981", href: "/downloads/reference.pdf" },
-      { name: "CDA Registration Info", tag: "Info", tagColor: "#64748b", href: "/downloads/reference.pdf" },
-    ],
-  },
-  req_2: {
-    title: "Proof of Business Location",
+    title: "Proof of Right to Use Location",
     icon: "📍",
+    notes: [
+      "If owned: Proof of ownership – Tax Declaration / Land Tax Receipt or Building Permit",
+      "If not owned by the applicant: Contract of Lease / Memorandum of Agreement / Affidavit of Consent or Conformity from the property owner supported by Proof of ownership or CENTENARIO",
+    ],
     files: [
       { name: "Notarized Lease Contract Template", tag: "Template", tagColor: "#8b5cf6", href: "/downloads/reference.pdf" },
       { name: "Affidavit of Non-rental (Sole Prop)", tag: "Template", tagColor: "#8b5cf6", href: "/downloads/reference.pdf" },
       { name: "Secretary's Certificate Template (Corp)", tag: "Template", tagColor: "#8b5cf6", href: "/downloads/reference.pdf" },
     ],
   },
-  req_3: {
-    title: "Franchise / Tradename Documents",
-    icon: "™️",
-    files: [
-      { name: "Franchise Agreement Sample", tag: "Sample", tagColor: "#f59e0b", href: "/downloads/reference.pdf" },
-      { name: "IPO Registration Info", tag: "Info", tagColor: "#64748b", href: "/downloads/reference.pdf" },
-    ],
-  },
-  req_4: {
-    title: "Required Clearances",
-    icon: "✅",
-    files: [
-      { name: "Barangay Clearance Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
-      { name: "Zoning Clearance Requirements", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
-      { name: "City Health / Sanitary Permit Info", tag: "Info", tagColor: "#64748b", href: "/downloads/reference.pdf" },
-      { name: "ENRO Clearance Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
-      { name: "OBO Clearance Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
-    ],
-  },
-  req_5: {
-    title: "Special Clearances",
-    icon: "📂",
-    files: [
-      { name: "Special Clearance Requirements List", tag: "Checklist", tagColor: "#10b981", href: "/downloads/reference.pdf" },
-      { name: "RONO Application Guide (EGAMES/Cockfighting)", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
-    ],
-  },
-  req_6: {
-    title: "Owner's Valid ID",
+  req_2: {
+    title: "Valid Identification (ID) Card",
     icon: "🪪",
+    notes: [
+      "ID Card of the Owner",
+      "If applicable: ID of Authorized Representative with supporting SPA or Secretary Certificate",
+    ],
     files: [
       { name: "Accepted Valid IDs List", tag: "Info", tagColor: "#64748b", href: "/downloads/reference.pdf" },
+    ],
+  },
+  // ── Required Clearances — one entry per clearance ─────────────────────────
+  req_clearance_0: {
+    title: "Barangay Clearance",
+    icon: "🏘️",
+    where: "Barangay Hall",
+    files: [
+      { name: "Barangay Clearance Application Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_clearance_1: {
+    title: "Fire Safety Inspection Certificate (FSIC)",
+    icon: "🔥",
+    where: "Bureau of Fire Protection (BFP)",
+    files: [
+      { name: "BFP FSIC Requirements Checklist", tag: "Checklist", tagColor: "#10b981", href: "/downloads/reference.pdf" },
+      { name: "Fire Safety Inspection Form", tag: "Form", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_clearance_2: {
+    title: "Zoning Clearance",
+    icon: "🗺️",
+    where: "Zoning Division",
+    files: [
+      { name: "Zoning Clearance Application Form", tag: "Form", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+      { name: "Zoning Requirements Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_clearance_3: {
+    title: "City Health Office Clearance / Sanitary Permit to Operate",
+    icon: "🏥",
+    where: "City Health Office",
+    files: [
+      { name: "Sanitary Permit Application Form", tag: "Form", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+      { name: "City Health Clearance Requirements", tag: "Checklist", tagColor: "#10b981", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_clearance_4: {
+    title: "Office of the Building Official (OBO) Clearance",
+    icon: "🏗️",
+    where: "Office of the Building Official",
+    files: [
+      { name: "OBO Clearance Application Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_clearance_5: {
+    title: "CENRO Clearance",
+    icon: "🌿",
+    where: "CENRO",
+    files: [
+      { name: "CENRO Clearance Requirements", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  // ── Special Clearances — one entry per clearance ───────────────────────────
+  req_special_0: {
+    title: "City Agriculture Office Clearance",
+    icon: "🌾",
+    where: "City Agriculture Office",
+    applicableTo: "Agri Products / Agriculture related businesses",
+    files: [
+      { name: "City Agriculture Clearance Form", tag: "Form", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_special_1: {
+    title: "City Veterinary Office Clearance",
+    icon: "🐄",
+    where: "City Veterinary Office",
+    applicableTo: "Meat and Poultry products",
+    files: [
+      { name: "Veterinary Clearance Requirements", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_special_2: {
+    title: "City Tourism Office Clearance",
+    icon: "🏖️",
+    where: "City Tourism Office",
+    applicableTo: "Tourism Related businesses",
+    files: [
+      { name: "Tourism Clearance Application Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_special_3: {
+    title: "City Administrator Clearance",
+    icon: "🏛️",
+    where: "Office of the City Administrator",
+    applicableTo: "3 Major Markets & Manukan Country",
+    files: [
+      { name: "City Administrator Clearance Form", tag: "Form", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_special_4: {
+    title: "BTTMD Clearance",
+    icon: "🚌",
+    where: "BTTMD",
+    applicableTo: "BTTMD-regulated businesses",
+    files: [
+      { name: "BTTMD Clearance Requirements", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_special_5: {
+    title: "Resolution of No Objection (RONO)",
+    icon: "📜",
+    where: "Sangguniang Panlungsod (SP)",
+    applicableTo: "EGAMES, Cockfighting and the like",
+    files: [
+      { name: "RONO Application Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+      { name: "RONO Sample Form", tag: "Sample", tagColor: "#f59e0b", href: "/downloads/reference.pdf" },
     ],
   },
   new_step_0: {
@@ -550,7 +792,7 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
             letterSpacing: "0.08em",
             marginBottom: 1
           }}>
-            Documents & Forms
+            {docSet.notes ? "Requirements & Documents" : (docSet.where || docSet.applicableTo) ? "Clearance Details" : "Documents & Forms"}
           </div>
           <div style={{
             fontSize: isMobile ? 13.5 : 14.5,
@@ -562,6 +804,88 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
           </div>
         </div>
       </div>
+
+      {/* Notes / bullets — req_* items */}
+      {docSet.notes && docSet.notes.length > 0 && (
+        <div style={{
+          padding: isMobile ? "10px 14px 4px" : "12px 18px 4px",
+          borderBottom: `1px solid ${accentColor}14`,
+        }}>
+          <div style={{
+            fontSize: isMobile ? 10 : 10.5,
+            fontWeight: 700,
+            color: accentColor,
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            marginBottom: 6,
+          }}>
+            Details
+          </div>
+          <ul style={{
+            margin: 0,
+            paddingLeft: 18,
+            fontSize: isMobile ? 12.5 : 13,
+            color: "#4b5563",
+            lineHeight: 1.65,
+          }}>
+            {docSet.notes.map((note, i) => (
+              <li key={i} style={{ marginBottom: i < docSet.notes.length - 1 ? 4 : 8 }}>{note}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* Where to get / applicable to — clearance entries */}
+      {(docSet.where || docSet.applicableTo) && (
+        <div style={{
+          padding: isMobile ? "10px 14px 8px" : "12px 18px 8px",
+          borderBottom: `1px solid ${accentColor}14`,
+          display: "flex",
+          flexDirection: "column",
+          gap: 6,
+        }}>
+          {docSet.where && (
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 7 }}>
+              <span style={{ fontSize: 13, flexShrink: 0, marginTop: 1 }}>📍</span>
+              <div>
+                <div style={{
+                  fontSize: isMobile ? 9.5 : 10,
+                  fontWeight: 700,
+                  color: accentColor,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  marginBottom: 1,
+                }}>
+                  Where to get
+                </div>
+                <div style={{ fontSize: isMobile ? 12.5 : 13, color: "#374151", fontWeight: 500 }}>
+                  {docSet.where}
+                </div>
+              </div>
+            </div>
+          )}
+          {docSet.applicableTo && (
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 7 }}>
+              <span style={{ fontSize: 13, flexShrink: 0, marginTop: 1 }}>🏷️</span>
+              <div>
+                <div style={{
+                  fontSize: isMobile ? 9.5 : 10,
+                  fontWeight: 700,
+                  color: "#f59e0b",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  marginBottom: 1,
+                }}>
+                  Applicable to
+                </div>
+                <div style={{ fontSize: isMobile ? 12.5 : 13, color: "#374151", fontWeight: 500 }}>
+                  {docSet.applicableTo}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* File list */}
       <div style={{ padding: isMobile ? "12px 14px" : "14px 16px", display: "flex", flexDirection: "column", gap: 8 }}>
