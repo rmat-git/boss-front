@@ -255,3 +255,223 @@ export const PERMIT_DATA = {
     ],
   },
 };
+
+// ─── Document Registry ────────────────────────────────────────────────────────
+//
+// Drives the DocumentViewer panel in PermitUI.
+// Keys must match the key scheme used by PermitSection:
+//   encodingDocs (non-clearance) → req_0, req_1, req_2 …
+//   required clearances          → req_clearance_0 … req_clearance_5
+//   special clearances           → req_special_0  … req_special_5
+//   new permit steps             → new_step_0, new_step_1, new_step_2
+//   renewal steps                → renewal_step_0, renewal_step_1, renewal_step_2
+
+export const DOC_REGISTRY = {
+
+  // ── Encoding docs (non-clearance) ─────────────────────────────────────────
+  req_0: {
+    title: "Proof of Registration",
+    icon: "📋",
+    notes: [
+      "Issued by SEC for all kinds of Corporations, Associations and Partnership",
+      "Issued by DTI for Sole / Single Proprietor",
+      "Issued by the Cooperative Development Authority for Cooperatives",
+      "Other Requirements if applicable: Franchise Agreement, Intellectual Property Office (IPO) registration, etc.",
+    ],
+    files: [
+      { name: "Business Application Form (PDF)", tag: "Required", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+      { name: "Instructions for Filling Out the Form", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_1: {
+    title: "Proof of Right to Use Location",
+    icon: "📍",
+    notes: [
+      "If owned: Proof of ownership – Tax Declaration / Land Tax Receipt or Building Permit",
+      "If not owned by the applicant: Contract of Lease / Memorandum of Agreement / Affidavit of Consent or Conformity from the property owner supported by Proof of ownership or CENTENARIO",
+    ],
+    files: [
+      { name: "Notarized Lease Contract Template", tag: "Template", tagColor: "#8b5cf6", href: "/downloads/reference.pdf" },
+      { name: "Affidavit of Non-rental (Sole Prop)", tag: "Template", tagColor: "#8b5cf6", href: "/downloads/reference.pdf" },
+      { name: "Secretary's Certificate Template (Corp)", tag: "Template", tagColor: "#8b5cf6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_2: {
+    title: "Valid Identification (ID) Card",
+    icon: "🪪",
+    notes: [
+      "ID Card of the Owner",
+      "If applicable: ID of Authorized Representative with supporting SPA or Secretary Certificate",
+    ],
+    files: [
+      { name: "Accepted Valid IDs List", tag: "Info", tagColor: "#64748b", href: "/downloads/reference.pdf" },
+    ],
+  },
+
+  // ── Required Clearances ───────────────────────────────────────────────────
+  req_clearance_0: {
+    title: "Barangay Clearance",
+    icon: "🏘️",
+    where: "Barangay Hall",
+    files: [
+      { name: "Barangay Clearance Application Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_clearance_1: {
+    title: "Fire Safety Inspection Certificate (FSIC)",
+    icon: "🔥",
+    where: "Bureau of Fire Protection (BFP)",
+    files: [
+      { name: "BFP FSIC Requirements Checklist", tag: "Checklist", tagColor: "#10b981", href: "/downloads/reference.pdf" },
+      { name: "Fire Safety Inspection Form", tag: "Form", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_clearance_2: {
+    title: "Zoning Clearance",
+    icon: "🗺️",
+    where: "Zoning Division",
+    files: [
+      { name: "Zoning Clearance Application Form", tag: "Form", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+      { name: "Zoning Requirements Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_clearance_3: {
+    title: "City Health Office Clearance / Sanitary Permit to Operate",
+    icon: "🏥",
+    where: "City Health Office",
+    files: [
+      { name: "Sanitary Permit Application Form", tag: "Form", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+      { name: "City Health Clearance Requirements", tag: "Checklist", tagColor: "#10b981", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_clearance_4: {
+    title: "Office of the Building Official (OBO) Clearance",
+    icon: "🏗️",
+    where: "Office of the Building Official",
+    files: [
+      { name: "OBO Clearance Application Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_clearance_5: {
+    title: "CENRO Clearance",
+    icon: "🌿",
+    where: "CENRO",
+    files: [
+      { name: "CENRO Clearance Requirements", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+
+  // ── Special Clearances ────────────────────────────────────────────────────
+  req_special_0: {
+    title: "City Agriculture Office Clearance",
+    icon: "🌾",
+    where: "City Agriculture Office",
+    applicableTo: "Agri Products / Agriculture related businesses",
+    files: [
+      { name: "City Agriculture Clearance Form", tag: "Form", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_special_1: {
+    title: "City Veterinary Office Clearance",
+    icon: "🐄",
+    where: "City Veterinary Office",
+    applicableTo: "Meat and Poultry products",
+    files: [
+      { name: "Veterinary Clearance Requirements", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_special_2: {
+    title: "City Tourism Office Clearance",
+    icon: "🏖️",
+    where: "City Tourism Office",
+    applicableTo: "Tourism Related businesses",
+    files: [
+      { name: "Tourism Clearance Application Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_special_3: {
+    title: "City Administrator Clearance",
+    icon: "🏛️",
+    where: "Office of the City Administrator",
+    applicableTo: "3 Major Markets & Manukan Country",
+    files: [
+      { name: "City Administrator Clearance Form", tag: "Form", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_special_4: {
+    title: "BTTMD Clearance",
+    icon: "🚌",
+    where: "BTTMD",
+    applicableTo: "BTTMD-regulated businesses",
+    files: [
+      { name: "BTTMD Clearance Requirements", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  req_special_5: {
+    title: "Resolution of No Objection (RONO)",
+    icon: "📜",
+    where: "Sangguniang Panlungsod (SP)",
+    applicableTo: "EGAMES, Cockfighting and the like",
+    files: [
+      { name: "RONO Application Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+      { name: "RONO Sample Form", tag: "Sample", tagColor: "#f59e0b", href: "/downloads/reference.pdf" },
+    ],
+  },
+
+  // ── New Permit Steps ──────────────────────────────────────────────────────
+  new_step_0: {
+    title: "Step 1 — Application & Encoding (New)",
+    icon: "📝",
+    files: [
+      { name: "Business Application Form (PDF)", tag: "Required", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+      { name: "Requirements Checklist (New Permit)", tag: "Checklist", tagColor: "#10b981", href: "/downloads/reference.pdf" },
+      { name: "BPLO Counter Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  new_step_1: {
+    title: "Step 2 — Assessment & Payment (New)",
+    icon: "💳",
+    files: [
+      { name: "CTO Assessment Form", tag: "Required", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+      { name: "Fee Schedule 2025", tag: "Reference", tagColor: "#8b5cf6", href: "/downloads/reference.pdf" },
+      { name: "Online Payment Guide (GCash / PayMaya)", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  new_step_2: {
+    title: "Step 3 — Receive Mayor's Permit (New)",
+    icon: "📜",
+    files: [
+      { name: "Mayor's Permit Sample (for reference)", tag: "Sample", tagColor: "#f59e0b", href: "/downloads/reference.pdf" },
+      { name: "QR Verification Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+      { name: "Hard Copy Pickup Instructions", tag: "Info", tagColor: "#64748b", href: "/downloads/reference.pdf" },
+    ],
+  },
+
+  // ── Renewal Steps ─────────────────────────────────────────────────────────
+  renewal_step_0: {
+    title: "Step 1 — Application & Encoding (Renewal)",
+    icon: "📝",
+    files: [
+      { name: "Pre-printed Application Form (PDF)", tag: "Required", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+      { name: "Requirements Checklist (Renewal)", tag: "Checklist", tagColor: "#10b981", href: "/downloads/reference.pdf" },
+      { name: "BPLO Counter Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+    ],
+  },
+  renewal_step_1: {
+    title: "Step 2 — Submit & Review (Renewal)",
+    icon: "📂",
+    files: [
+      { name: "Document Submission Checklist", tag: "Checklist", tagColor: "#10b981", href: "/downloads/reference.pdf" },
+      { name: "Assessment Form", tag: "Required", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
+    ],
+  },
+  renewal_step_2: {
+    title: "Step 3 — Receive Mayor's Permit (Renewal)",
+    icon: "📜",
+    files: [
+      { name: "Mayor's Permit Sample (for reference)", tag: "Sample", tagColor: "#f59e0b", href: "/downloads/reference.pdf" },
+      { name: "QR Verification Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+      { name: "Hard Copy Pickup Instructions", tag: "Info", tagColor: "#64748b", href: "/downloads/reference.pdf" },
+    ],
+  },
+};
