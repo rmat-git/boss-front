@@ -125,7 +125,25 @@ export function DocItem({ number, title, notes, accentColor = "#ff9c43", onClick
               lineHeight: 1.5,
               overflowWrap: "break-word"
             }}>
-              {notes.map((note, i) => <li key={i}>{note}</li>)}
+              {notes.map((note, i) => {
+                if (typeof note === "object" && note !== null) {
+                  return note.indent ? (
+                    <div key={i} style={{
+                      paddingLeft: 16,
+                      marginBottom: 2,
+                      color: "#5b6572",
+                      lineHeight: 1.5,
+                      overflowWrap: "break-word",
+                      listStyle: "none",
+                    }}>
+                      {note.text}
+                    </div>
+                  ) : (
+                    <li key={i} style={{ fontWeight: 600, color: "#374151" }}>{note.text}</li>
+                  );
+                }
+                return <li key={i}>{note}</li>;
+              })}
             </ul>
           ) : (
             <div style={{
@@ -343,21 +361,9 @@ export function MetaBadge({ label, value, color }) {
 // FIX #11: added accentColor prop — defaults to "#3b82f6" to preserve existing
 // appearance, but now accepts the section's accentColor for correct theming
 // (e.g. orange for New Permit sections).
-export function StepBlock({ index, step, isLast, onClick, isSelected, isMobile, accentColor = "#3b82f6" }) {
+export function StepBlock({ index, step, isLast, isMobile, accentColor = "#3b82f6" }) {
   return (
-    <div
-      style={{
-        position: "relative",
-        cursor: onClick ? "pointer" : "default",
-        borderRadius: 12,
-        border: `1.5px solid ${isSelected ? accentColor + "60" : "transparent"}`,
-        background: isSelected ? accentColor + "0d" : "transparent",
-        padding: isSelected ? (isMobile ? "8px 8px 8px 3px" : "10px 10px 10px 4px") : "0",
-        transition: "all 0.2s ease",
-        boxShadow: isSelected ? `0 0 0 3px ${accentColor}15` : "none",
-      }}
-      onClick={onClick}
-    >
+    <div style={{ position: "relative" }}>
       {!isLast && (
         <div style={{
           position: "absolute",
@@ -375,7 +381,7 @@ export function StepBlock({ index, step, isLast, onClick, isSelected, isMobile, 
           width: 28,
           height: 28,
           borderRadius: "50%",
-          background: isSelected ? accentColor : accentColor + "cc",
+          background: accentColor + "cc",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -384,111 +390,81 @@ export function StepBlock({ index, step, isLast, onClick, isSelected, isMobile, 
           color: "white",
           flexShrink: 0,
           zIndex: 1,
-          transition: "background 0.18s ease",
         }}>
           {index + 1}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          {/* Client action */}
+          {/* Client */}
           <div style={{
             padding: isMobile ? "8px 10px" : "9px 12px",
             background: accentColor + "0d",
-            borderRadius: 9,
             border: `1px solid ${accentColor}30`,
+            borderRadius: 9,
             marginBottom: 6,
           }}>
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 3,
-            }}>
-              <div style={{
-                fontSize: isMobile ? 12.5 : 13.5,
-                fontWeight: 700,
-                color: accentColor,
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-              }}>
-                Client
+            <div style={{ fontWeight: 700, color: accentColor, fontSize: isMobile ? 12.5 : 13.5, marginBottom: 4 }}>
+            </div>
+            {typeof step.client === "object" ? (
+              <div style={{ fontSize: isMobile ? 13 : 14, lineHeight: 1.7, color: accentColor + "dd" }}>
+                <div style={{ marginBottom: 4 }}>{step.client.intro}</div>
+                <div style={{ marginBottom: 2 }}>
+                  <span style={{ fontWeight: 600, color: accentColor }}>🔗 Portal: </span>
+                  <a href={step.client.link} target="_blank" rel="noopener noreferrer"
+                    style={{ color: accentColor, fontWeight: 600, textDecoration: "underline" }}>
+                    {step.client.link}
+                  </a>
+                </div>
+                <div style={{ marginBottom: 2 }}>
+                  <span style={{ fontWeight: 600, color: accentColor }}>📧 Email: </span>
+                  <a href={`mailto:${step.client.email}`}
+                    style={{ color: accentColor, fontWeight: 600, textDecoration: "underline" }}>
+                    {step.client.email}
+                  </a>
+                </div>
+                <div>
+                  <span style={{ fontWeight: 600, color: accentColor }}>📝 Subject: </span>
+                  {step.client.subject}
+                </div>
               </div>
-              {onClick && (
-                <span style={{
-                  fontSize: isMobile ? 10 : 11,
-                  fontWeight: 600,
-                  color: accentColor,
-                  background: accentColor + "18",
-                  border: `1px solid ${accentColor}30`,
-                  borderRadius: 999,
-                  padding: "2px 8px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 3,
-                }}>
-                  view docs ›
-                </span>
-              )}
-            </div>
-            <div style={{
-              fontSize: isMobile ? 13.5 : 14.5,
-              color: accentColor + "dd",
-              lineHeight: 1.5
-            }}>
-              {step.client}
-            </div>
+            ) : (
+              <div style={{ fontSize: isMobile ? 13.5 : 14.5, color: accentColor + "dd", lineHeight: 1.6 }}>
+                {step.client}
+              </div>
+            )}
           </div>
-          {/* Agency action */}
+
+          {/* Agency Action */}
           <div style={{
             padding: isMobile ? "8px 10px" : "9px 12px",
             background: "#fafafa",
-            borderRadius: 9,
             border: "1px solid #f0e8dc",
+            borderRadius: 9,
             marginBottom: 6,
           }}>
-            <div style={{
-              fontSize: isMobile ? 12.5 : 13.5,
-              fontWeight: 700,
-              color: "#e07620",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              marginBottom: 3
-            }}>
-              Agency Action
+            <div style={{ fontWeight: 700, color: "#e07620", fontSize: isMobile ? 12.5 : 13.5, marginBottom: 3 }}>
+              🏢 Agency Action:
             </div>
-            <div style={{
-              fontSize: isMobile ? 13.5 : 14.5,
-              color: "#374151",
-              lineHeight: 1.5,
-              whiteSpace: "pre-line"
-            }}>
+            <div style={{ fontSize: isMobile ? 13.5 : 14.5, color: "#374151", lineHeight: 1.6, whiteSpace: "pre-line" }}>
               {step.agency}
             </div>
           </div>
-          {/* Meta row */}
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {step.fees !== undefined && (
-              <MetaBadge label="Fees" value={step.fees} color="#10b981" />
-            )}
-            {step.time !== undefined && (
-              <MetaBadge label="Time" value={step.time} color="#3b82f6" />
-            )}
-          </div>
-          {/* Responsible persons */}
+
+          {/* Responsible */}
           {step.responsible && (
             <div style={{
-              marginTop: 8,
               padding: isMobile ? "7px 10px" : "8px 12px",
               background: "#fafaf9",
-              borderRadius: 8,
               border: "1px solid #f0e8dc",
-              fontSize: isMobile ? 12 : 13,
-              color: "#6b7280",
-              lineHeight: 1.55,
+              borderRadius: 8,
             }}>
-              <span style={{ fontWeight: 700, color: "#374151" }}>👤 Responsible: </span>
-              {Array.isArray(step.responsible)
-                ? step.responsible.join(" · ")
-                : step.responsible}
+              <div style={{ fontWeight: 700, color: "#374151", fontSize: isMobile ? 12 : 13, marginBottom: 3 }}>
+                📋 Responsible:
+              </div>
+              <div style={{ fontSize: isMobile ? 12 : 13, color: "#6b7280", lineHeight: 1.6 }}>
+                {Array.isArray(step.responsible)
+                  ? step.responsible.map((r, i) => <div key={i}>{r}</div>)
+                  : step.responsible}
+              </div>
             </div>
           )}
         </div>
@@ -617,7 +593,6 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
             letterSpacing: "0.08em",
             marginBottom: 6,
           }}>
-            Details
           </div>
           <ul style={{
             margin: 0,
@@ -626,9 +601,24 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
             color: "#4b5563",
             lineHeight: 1.65,
           }}>
-            {docSet.notes.map((note, i) => (
-              <li key={i} style={{ marginBottom: i < docSet.notes.length - 1 ? 4 : 8 }}>{note}</li>
-            ))}
+            {docSet.notes.map((note, i) => {
+              if (typeof note === "object" && note !== null) {
+                return note.indent ? (
+                  <div key={i} style={{
+                    paddingLeft: 16,
+                    marginBottom: i < docSet.notes.length - 1 ? 4 : 8,
+                    color: "#4b5563",
+                    lineHeight: 1.65,
+                    overflowWrap: "break-word",
+                  }}>
+                    {note.text}
+                  </div>
+                ) : (
+                  <li key={i} style={{ marginBottom: 2, fontWeight: 600, color: "#374151" }}>{note.text}</li>
+                );
+              }
+              return <li key={i} style={{ marginBottom: i < docSet.notes.length - 1 ? 4 : 8 }}>{note}</li>;
+            })}
           </ul>
         </div>
       )}
@@ -784,7 +774,27 @@ export function DocumentViewer({ selectedKey, label, accentColor = "#ff9c43" }) 
         color: "#92400e",
         lineHeight: 1.6,
       }}>
-        <strong>📌 Note:</strong> Downloads are for reference only. Submit original or certified true copies as required. Contact CMO–BPLO for the most current versions.
+        {docSet.link ? (
+          <>
+            <strong>🔗 Official Reference:</strong>{" "}
+            <br />
+            <a
+              href={docSet.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: "#b45309",
+                fontWeight: 600,
+                textDecoration: "underline",
+                wordBreak: "break-all",
+              }}
+            >
+              {docSet.link}
+            </a>
+          </>
+        ) : (
+          <><strong>📌 Note:</strong> Downloads are for reference only. Submit original or certified true copies as required. Contact CMO–BPLO for the most current versions.</>
+        )}
       </div>
     </div>
   );

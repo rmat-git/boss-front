@@ -211,7 +211,7 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor, 
           </p>
         </div>
 
-        {/* Meta Info Bar */}
+        {/* Meta Info Bar 
         <div style={{
           display: "grid",
           gridTemplateColumns: isMobile
@@ -238,13 +238,13 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor, 
               <div style={{ fontWeight: 700, color: accentColor, fontSize: isMobile ? 10 : 11, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>
                 {item.label}
               </div>
-              {/* MOBILE STRETCH FIX: Added overflowWrap */}
+             MOBILE STRETCH FIX: Added overflowWrap 
               <div style={{ fontWeight: 600, color: "#1a1208", lineHeight: 1.3, overflowWrap: "anywhere" }}>
                 {item.value}
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
 
         {/* Mobile hint pill — surfaces the tap-to-view affordance */}
         {isMobile && (
@@ -275,7 +275,7 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor, 
           <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 16 : 22, minWidth: 0, order: isMobile ? 2 : 1 }}>
 
             <SectionCard title="Checklist of Requirements" accent={accentColor}>
-              <SubHeading label="For Encoding" accentColor={accentColor} />
+              <SubHeading label="Requirements" accentColor={accentColor} />
               {(() => {
                 // Track sequential number only for non-clearance items
                 let counter = 0;
@@ -368,8 +368,8 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor, 
                   );
                 });
               })()}
-
-              <div style={{
+    
+              {/* <div style={{
                 marginTop: 14,
                 padding: isMobile ? "11px 13px" : "13px 15px",
                 background: "#fffbeb",
@@ -392,7 +392,7 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor, 
                     ? data.proxyNote.toSign.join(" · ")
                     : data.proxyNote.toSign}
                 </div>
-              </div>
+              </div> */}
 
               {/* Walk-in receiving docs — only rendered when receivingDocs exists */}
               {data.receivingDocs && (
@@ -477,22 +477,17 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor, 
           {/* Right: Procedure (Desktop) | Left: Requirements (Mobile — swapped via order) */}
           <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 16 : 22, minWidth: 0, order: isMobile ? 1 : 2 }}>
 
-            <SectionCard title="Procedure Flow" accent="#3b82f6">
+            <SectionCard title="Steps" accent="#3b82f6">
               <div style={{ display: "flex", flexDirection: "column", gap: isMobile ? 14 : 18 }}>
-                {data.steps.map((step, i) => {
-                  const key = `${stepPrefix}_${i}`;
-                  return (
-                    <StepBlock
-                      key={key}
-                      index={i}
-                      step={step}
-                      isLast={i === data.steps.length - 1}
-                      onClick={() => handleDocClick(key)}
-                      isSelected={selectedKey === key}
-                      isMobile={isMobile}
-                    />
-                  );
-                })}
+                {data.steps.map((step, i) => (
+                  <StepBlock
+                    key={`${stepPrefix}_${i}`}
+                    index={i}
+                    step={step}
+                    isLast={i === data.steps.length - 1}
+                    isMobile={isMobile}
+                  />
+                ))}
               </div>
               <div style={{
                 marginTop: 22,
@@ -529,40 +524,9 @@ export default function PermitSection({ id, data, bg, accentColor, borderColor, 
           </div>
         </div>
 
-        {/* Full-width: How to Submit */}
-        {data.submissionNote && (
-          <div style={{ marginTop: 28 }}>
-            <SubHeading label="How to Submit" accentColor={accentColor} />
-            <div style={{
-              marginTop: 12,
-              padding: isMobile ? "14px 16px" : "16px 20px",
-              background: "#eff6ff",
-              border: "1px solid #bfdbfe",
-              borderRadius: 10,
-              fontSize: isMobile ? 13 : 14,
-              color: "#1e3a8a",
-              lineHeight: 1.65,
-            }}>
-              <div style={{ fontWeight: 700, marginBottom: 6 }}>📧 Email your requirements to:</div>
-              <div style={{ marginBottom: 4 }}>
-                <a href={`mailto:${data.submissionNote.email}`} style={{ color: accentColor, fontWeight: 700 }}>
-                  {data.submissionNote.email}
-                </a>
-              </div>
-              <div style={{ marginBottom: 4 }}>
-                <span style={{ fontWeight: 600 }}>Subject: </span>
-                {data.submissionNote.subject}
-              </div>
-              <div style={{ fontSize: isMobile ? 11.5 : 12.5, color: "#64748b", marginTop: 6 }}>
-                In accordance with {data.submissionNote.reference}
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Full-width: Where to Secure */}
         <div style={{
-          marginTop: data.submissionNote ? 16 : 0,
+          marginTop: 16,
           padding: isMobile ? "12px 14px" : "14px 18px",
           background: "#f0fdf4",
           border: "1px solid #86efac",

@@ -43,24 +43,28 @@ export const PERMIT_DATA = {
       {
         title: "Proof of Registration",
         notes: [
-          "Issued by SEC for all kinds of Corporations, Associations and Partnership",
-          "Issued by DTI for Sole / Single Proprietor",
-          "Issued by the Cooperative Development Authority for Cooperatives",
-          "Other Requirements if applicable: Franchise Agreement, Intellectual Property Office (IPO) registration, etc.",
+          {text: "Issued by asdf for all kinds of Corporations, Associations and Partnership", indent: false},
+          { text: "Issued by DTI for Sole / Single Proprietorship", indent: false},
+          { text: "Issued by the Cooperative Development Authority for Cooperatives", indent: false},
+          {text: "Other Requirements if applicable:", indent: false}, 
+          {text: "Franchise Agreement, Intellectual Property Office (IPO) registration, etc.", indent: true},
         ],
       },
       {
         title: "Proof of Right of Applicant to use location as business address",
         notes: [
-          "If owned: Proof of ownership – Tax Declaration / Land Tax Receipt or Building Permit",
-          "If not owned by the applicant: Contract of Lease / Memorandum of Agreement / Affidavit of Consent or Conformity from the property owner supported by Proof of ownership or CENTENARIO",
+          { text: "If owned:", indent: false },
+          { text: "Proof of ownership – Tax Declaration / Land Tax Receipt or Building Permit", indent: true },
+          { text: "If not owned by the applicant:", indent: false },
+          { text: "Contract of Lease / Memorandum of Agreement / Affidavit of Consent or Conformity from the property owner supported by Proof of ownership or CENTENARIO", indent: true },
         ],
       },
       {
-        title: "Valid Identification (ID) Card",
+        title: "List of Valid Identification (ID) Card",
         notes: [
           "ID Card of the Owner",
-          "If applicable: ID of Authorized Representative with supporting SPA or Secretary Certificate",
+          { text: "If applicable:", indent: false },
+          { text: "ID of Authorized Representative with supporting SPA or Secretary Certificate", indent: true },
         ],
       },
       {
@@ -111,7 +115,12 @@ export const PERMIT_DATA = {
 
     steps: [
       {
-        client: "Fill in the Online Application at https://ebpls.bacolodcity.gov.ph/ and email the required documents to bplo_register@bacolodcity.gov.ph with the subject 'REQUIREMENTS FOR NEW BUSINESS SUBMISSION'.",
+        client: {
+          intro: "Fill in the Online Application and email the required documents:",
+          link: "https://ebpls.bacolodcity.gov.ph/",
+          email: "bplo_register@bacolodcity.gov.ph",
+          subject: "REQUIREMENTS FOR NEW BUSINESS SUBMISSION",
+        },
         agency: "BPLO receives and evaluates the online application and emailed documentary requirements for completeness.",
         fees: "None",
         time: "—",
@@ -122,7 +131,7 @@ export const PERMIT_DATA = {
         ],
       },
       {
-        client: "Check the email provided for the soft copy of your application and the link for tracking clearance status.",
+        client: "Pay your fees and check the email provided for the soft copy of your application and the link for tracking clearance status.",
         agency: "BPLO sends the applicant a soft copy of the application along with instructions and a tracking link for clearances.",
         fees: "—",
         time: "—",
@@ -219,7 +228,12 @@ export const PERMIT_DATA = {
 
     steps: [
       {
-        client: "Fill in the Online Renewal Application at https://ebpls.bacolodcity.gov.ph/ and email the required documents to bplo_register@bacolodcity.gov.ph with the subject 'REQUIREMENTS FOR BUSINESS RENEWAL SUBMISSION'.",
+        client: {
+          intro: "Fill in the Online Renewal Application and email the required documents:",
+          link: "https://ebpls.bacolodcity.gov.ph/",
+          email: "bplo_register@bacolodcity.gov.ph",
+          subject: "REQUIREMENTS FOR BUSINESS RENEWAL SUBMISSION",
+        },
         agency: "BPLO receives and evaluates the online renewal application and emailed documentary requirements for completeness.",
         fees: "None",
         time: "—",
@@ -272,11 +286,18 @@ export const DOC_REGISTRY = {
   req_0: {
     title: "Proof of Registration",
     icon: "📋",
+    link: "https://ebpls.bacolodcity.gov.ph/",
     notes: [
-      "Issued by SEC for all kinds of Corporations, Associations and Partnership",
-      "Issued by DTI for Sole / Single Proprietor",
-      "Issued by the Cooperative Development Authority for Cooperatives",
-      "Other Requirements if applicable: Franchise Agreement, Intellectual Property Office (IPO) registration, etc.",
+      {text: "For Sole Proprietorship - DTI", indent: false},
+      {text: "Link: dti.link.placeholders", indent: true},
+
+      {text: "For Corporations, Associations and Partnership - SEC", indent: false},
+      {text: "Link: sec.link.placeholders", indent: true},
+      {text: "For Cooperatives - CDA", indent: false},
+      {text: "Link: cda.link.placeholders", indent: true},
+      {text: "Other Requirements if applicable:", indent: false}, 
+      {text: "Franchise Agreement, Intellectual Property Office (IPO) registration, etc.", indent: true},
+      
     ],
     files: [
       { name: "Business Application Form (PDF)", tag: "Required", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
@@ -286,9 +307,15 @@ export const DOC_REGISTRY = {
   req_1: {
     title: "Proof of Right to Use Location",
     icon: "📍",
+    link: "https://placeholder.gov.ph/req_1",
     notes: [
-      "If owned: Proof of ownership – Tax Declaration / Land Tax Receipt or Building Permit",
-      "If not owned by the applicant: Contract of Lease / Memorandum of Agreement / Affidavit of Consent or Conformity from the property owner supported by Proof of ownership or CENTENARIO",
+      { text: "If owned, proof of ownership:", indent: false },
+      { text: "Tax Declaration / Land Tax Receipt", indent: true },
+      { text: "Building Permit", indent: true },
+      { text: "If not owned by the applicant:", indent: false },
+      { text: "Contract of Lease", indent: true },
+      { text: "Memorandum of Agreement", indent: true },
+      { text: "Affidavit of Consent or Conformity from the property owner supported by Proof of ownership of the CONSENTOR", indent: true },
     ],
     files: [
       { name: "Notarized Lease Contract Template", tag: "Template", tagColor: "#8b5cf6", href: "/downloads/reference.pdf" },
@@ -299,12 +326,21 @@ export const DOC_REGISTRY = {
   req_2: {
     title: "Valid Identification (ID) Card",
     icon: "🪪",
+    link: "https://placeholder.gov.ph/req_2",
     notes: [
-      "ID Card of the Owner",
-      "If applicable: ID of Authorized Representative with supporting SPA or Secretary Certificate",
+      {text: "Valid IDs:", indent: false},
+      {text: "National ID", indent: true},
+      {text: "Driver's License", indent: true},
+      {text: "SSS", indent: true},
+      {text: "PRC", indent: true},
+      {text: "UMID", indent: true},
+      {text: "GSIS ID", indent: true},
+      {text: "PhilHealth ID", indent: true},
+      {text: "If applicable:", indent: false },
+      {text: "ID of Authorized Representative (with supporting SPA or Secretary Certificate)", indent: true },
     ],
     files: [
-      { name: "Accepted Valid IDs List", tag: "Info", tagColor: "#64748b", href: "/downloads/reference.pdf" },
+      {   name: "Accepted Valid IDs List", tag: "Info", tagColor: "#64748b", href: "/downloads/reference.pdf" },
     ],
   },
 
@@ -312,6 +348,7 @@ export const DOC_REGISTRY = {
   req_clearance_0: {
     title: "Barangay Clearance",
     icon: "🏘️",
+    link: "https://placeholder.gov.ph/req_clearance_0",
     where: "Barangay Hall",
     files: [
       { name: "Barangay Clearance Application Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
@@ -320,6 +357,7 @@ export const DOC_REGISTRY = {
   req_clearance_1: {
     title: "Fire Safety Inspection Certificate (FSIC)",
     icon: "🔥",
+    link: "https://placeholder.gov.ph/req_clearance_1",
     where: "Bureau of Fire Protection (BFP)",
     files: [
       { name: "BFP FSIC Requirements Checklist", tag: "Checklist", tagColor: "#10b981", href: "/downloads/reference.pdf" },
@@ -329,6 +367,7 @@ export const DOC_REGISTRY = {
   req_clearance_2: {
     title: "Zoning Clearance",
     icon: "🗺️",
+    link: "https://placeholder.gov.ph/req_clearance_2",
     where: "Zoning Division",
     files: [
       { name: "Zoning Clearance Application Form", tag: "Form", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
@@ -338,6 +377,7 @@ export const DOC_REGISTRY = {
   req_clearance_3: {
     title: "City Health Office Clearance / Sanitary Permit to Operate",
     icon: "🏥",
+    link: "https://placeholder.gov.ph/req_clearance_3",
     where: "City Health Office",
     files: [
       { name: "Sanitary Permit Application Form", tag: "Form", tagColor: "#ef4444", href: "/downloads/reference.pdf" },
@@ -347,17 +387,19 @@ export const DOC_REGISTRY = {
   req_clearance_4: {
     title: "Office of the Building Official (OBO) Clearance",
     icon: "🏗️",
+    link: "https://placeholder.gov.ph/req_clearance_4",
     where: "Office of the Building Official",
     files: [
       { name: "OBO Clearance Application Guide", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
     ],
   },
   req_clearance_5: {
-    title: "CENRO Clearance",
+    title: "BENRO Clearance",
     icon: "🌿",
-    where: "CENRO",
+    link: "https://placeholder.gov.ph/req_clearance_5",
+    where: "BENRO",
     files: [
-      { name: "CENRO Clearance Requirements", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
+      { name: "BENRO Clearance Requirements", tag: "Guide", tagColor: "#3b82f6", href: "/downloads/reference.pdf" },
     ],
   },
 
@@ -365,6 +407,7 @@ export const DOC_REGISTRY = {
   req_special_0: {
     title: "City Agriculture Office Clearance",
     icon: "🌾",
+    link: "https://placeholder.gov.ph/req_special_0",
     where: "City Agriculture Office",
     applicableTo: "Agri Products / Agriculture related businesses",
     files: [
@@ -374,6 +417,7 @@ export const DOC_REGISTRY = {
   req_special_1: {
     title: "City Veterinary Office Clearance",
     icon: "🐄",
+    link: "https://placeholder.gov.ph/req_special_1",
     where: "City Veterinary Office",
     applicableTo: "Meat and Poultry products",
     files: [
@@ -383,6 +427,7 @@ export const DOC_REGISTRY = {
   req_special_2: {
     title: "City Tourism Office Clearance",
     icon: "🏖️",
+    link: "https://placeholder.gov.ph/req_special_2",
     where: "City Tourism Office",
     applicableTo: "Tourism Related businesses",
     files: [
@@ -392,6 +437,7 @@ export const DOC_REGISTRY = {
   req_special_3: {
     title: "City Administrator Clearance",
     icon: "🏛️",
+    link: "https://placeholder.gov.ph/req_special_3",
     where: "Office of the City Administrator",
     applicableTo: "3 Major Markets & Manukan Country",
     files: [
@@ -401,6 +447,7 @@ export const DOC_REGISTRY = {
   req_special_4: {
     title: "BTTMD Clearance",
     icon: "🚌",
+    link: "https://placeholder.gov.ph/req_special_4",
     where: "BTTMD",
     applicableTo: "BTTMD-regulated businesses",
     files: [
@@ -410,6 +457,7 @@ export const DOC_REGISTRY = {
   req_special_5: {
     title: "Resolution of No Objection (RONO)",
     icon: "📜",
+    link: "https://placeholder.gov.ph/req_special_5",
     where: "Sangguniang Panlungsod (SP)",
     applicableTo: "EGAMES, Cockfighting and the like",
     files: [
