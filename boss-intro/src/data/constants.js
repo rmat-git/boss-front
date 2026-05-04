@@ -12,7 +12,7 @@ export const MOBILE_BREAKPOINT = 900;
 
 export const AGENCIES = [
   "BPLO", "Bureau of Fire Protection", "Zoning Division", "City Health Office",
-  "Office of the Building Official", "CENRO", "BTTMD", "City Administrator",
+  "Office of the Building Official", "BENRO", "BTTMD", "City Administrator",
   "City Veterinarian", "City Agriculture", "Tourism Office",
 ];
 
@@ -72,7 +72,7 @@ export const PERMIT_DATA = {
           { title: "Zoning Clearance", office: "Zoning Division", key: "req_clearance_2" },
           { title: "City Health Office Clearance / Sanitary Permit to Operate", office: "City Health Office", key: "req_clearance_3" },
           { title: "Office of the Building Official (OBO) Clearance", office: "Office of the Building Official", key: "req_clearance_4" },
-          { title: "CENRO Clearance", office: "CENRO", key: "req_clearance_5" },
+          { title: "BENRO Clearance", office: "BENRO", key: "req_clearance_5" },
         ],
       },
       {
@@ -80,12 +80,12 @@ export const PERMIT_DATA = {
         type: "clearance_group",
         subtitle: "As applicable by business type",
         items: [
-          { title: "City Agriculture Office Clearance", office: "Agri Products / Agriculture related", key: "req_special_0" },
+          { title: "City Agriculture Office Clearance", office: "Agriculture related", key: "req_special_0" },
           { title: "City Veterinary Office Clearance", office: "Meat and Poultry products", key: "req_special_1" },
           { title: "City Tourism Office Clearance", office: "Tourism Related", key: "req_special_2" },
-          { title: "City Administrator Clearance", office: "3 Major Markets & Manukan Country", key: "req_special_3" },
+          { title: "City Administrator Clearance", office: "Manukan Country", key: "req_special_3" },
           { title: "BTTMD Clearance", office: "BTTMD-regulated businesses", key: "req_special_4" },
-          { title: "Resolution of No Objection (RONO)", office: "EGAMES, Cockfighting and the like — from SP", key: "req_special_5" },
+          { title: "Resolution of No Objection (RONO)", office: "EGAMES, Cockfighting", key: "req_special_5" },
         ],
       },
     ],
@@ -172,18 +172,18 @@ export const PERMIT_DATA = {
           "Zoning Clearance — Zoning Division",
           "City Health Office Clearance / Sanitary Permit to Operate",
           "Office of the Building Official (OBO) Clearance",
-          "CENRO Clearance",
+          "BENRO Clearance",
         ],
       },
       {
         title: "Special Clearances (as applicable by business type)",
         notes: [
-          "Agri Products / Agriculture related → City Agriculture Office",
+          "Agriculture related → City Agriculture Office",
           "Meat and Poultry products → City Veterinary Office",
           "Tourism Related → City Tourism Office",
-          "3 Major Markets & Manukan Country → City Administrator Clearance",
+          "Manukan Country → City Administrator Clearance",
           "BTTMD-regulated businesses → BTTMD Clearance",
-          "EGAMES, Cockfighting and the like → valid Resolution of No Objection (RONO) from SP",
+          "EGAMES, Cockfighting → valid Resolution of No Objection (RONO) from SP",
         ],
       },
       {
